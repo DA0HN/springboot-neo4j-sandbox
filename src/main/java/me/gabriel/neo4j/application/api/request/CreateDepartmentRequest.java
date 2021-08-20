@@ -4,5 +4,5 @@ package me.gabriel.neo4j.application.api.request;
  * @author daohn
  * @since 19/08/2021
  */
-public class CreateDepartmentRequest {
+public record CreateDepartmentRequest(String name) {
 }
