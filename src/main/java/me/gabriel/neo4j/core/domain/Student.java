@@ -7,6 +7,11 @@ import lombok.Setter;
 import me.gabriel.neo4j.infra.db.repositories.NodeEntity;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
+import org.springframework.data.neo4j.core.schema.Relationship;
+
+import java.util.List;
+
+import static org.springframework.data.neo4j.core.schema.Relationship.Direction.OUTGOING;
 
 /**
  * @author daohn
@@ -25,4 +30,9 @@ public class Student extends NodeEntity {
   @Property(name = "birth_year")
   private Integer birthYear;
 
+  @Relationship(type = "BELONGS_TO", direction = OUTGOING)
+  private Department departments;
+
+  @Relationship(type = "IS_LEARNING", direction = OUTGOING)
+  private List<IsLearning> isLearningSubjects;
 }
