@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import me.gabriel.neo4j.infra.db.repositories.NodeEntity;
+import org.springframework.data.neo4j.core.schema.Node;
 
 /**
  * @author daohn
@@ -14,6 +15,7 @@ import me.gabriel.neo4j.infra.db.repositories.NodeEntity;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Node(labels = {"Subject"})
 public class Subject extends NodeEntity {
   private String name;
 }
