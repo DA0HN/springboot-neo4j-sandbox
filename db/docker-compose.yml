@@ -10,10 +10,10 @@ services:
       - "7474:7474"
       - "7687:7687"
     volumes:
-      - ./neo4j-runtime/data:/data
-      - ./neo4j-runtime/logs:/logs
-      - ./neo4j-runtime/import:/var/lib/neo4j/import
-      - ./neo4j-runtime/plugins:/plugins
+      - ./runtime/data:/data
+      - ./runtime/logs:/logs
+      - ./runtime/import:/var/lib/neo4j/import
+      - ./runtime/plugins:/plugins
       - ./cypher_query.cql:/cyphers/interviews.cql
     environment:
       - NEO4J_AUTH=none
