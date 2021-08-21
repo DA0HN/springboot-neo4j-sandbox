@@ -8,6 +8,6 @@ import me.gabriel.neo4j.core.domain.Department;
  */
 public interface DepartmentRepository {
 
-  Department create(Department student);
+  Department create(Department department);
 
 }

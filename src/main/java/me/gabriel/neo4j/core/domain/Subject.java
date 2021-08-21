@@ -18,4 +18,9 @@ import org.springframework.data.neo4j.core.schema.Node;
 @Node(labels = {"Subject"})
 public class Subject extends NodeIdentity {
   private String name;
+
+  public Subject(Long id, String name) {
+    super(id);
+    this.name = name;
+  }
 }
