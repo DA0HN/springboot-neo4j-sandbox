@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import me.gabriel.neo4j.infra.db.repositories.NodeEntity;
+import me.gabriel.neo4j.infra.db.repositories.NodeIdentity;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.neo4j.core.schema.Relationship;
@@ -22,7 +22,7 @@ import static org.springframework.data.neo4j.core.schema.Relationship.Direction.
 @Node(labels = {"Student"})
 @NoArgsConstructor
 @AllArgsConstructor
-public class Student extends NodeEntity {
+public class Student extends NodeIdentity {
 
   private String name;
   private String country;
