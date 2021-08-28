@@ -18,9 +18,13 @@ import org.springframework.data.neo4j.core.schema.TargetNode;
 @AllArgsConstructor
 @RelationshipProperties
 public class IsLearning extends NodeIdentity {
-
   private Long marks;
-
   @TargetNode
   private Subject subject;
+
+  public IsLearning(Long id, Long marks, Subject subject) {
+    super(id);
+    this.marks = marks;
+    this.subject = subject;
+  }
 }
