@@ -38,7 +38,7 @@ public class StudentServiceAdapter implements StudentService {
     student.setIsLearning(isLearningRelations);
     student.setDepartment(department);
 
-    this.studentRepository.create(student);
+    student = this.studentRepository.create(student);
 
     return StudentCreateResponse.from(student);
   }
