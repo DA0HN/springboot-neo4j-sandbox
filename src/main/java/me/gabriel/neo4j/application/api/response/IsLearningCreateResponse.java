@@ -21,7 +21,7 @@ public record IsLearningCreateResponse(
   public static IsLearningCreateResponse from(IsLearning isLearning) {
     return new IsLearningCreateResponse(
       isLearning.getId(),
-      isLearning.getId(),
+      isLearning.getMarks(),
       SubjectCreateResponse.from(isLearning.getSubject())
     );
   }
