@@ -1,7 +1,7 @@
 package me.gabriel.neo4j.application.adapters;
 
 import lombok.AllArgsConstructor;
-import me.gabriel.neo4j.application.api.request.CreateStudentRequest;
+import me.gabriel.neo4j.application.api.request.StudentCreateRequest;
 import me.gabriel.neo4j.application.api.response.StudentCreateResponse;
 import me.gabriel.neo4j.core.domain.Department;
 import me.gabriel.neo4j.core.domain.IsLearning;
@@ -28,7 +28,7 @@ public class StudentServiceAdapter implements StudentService {
   private final DepartmentRepository departmentRepository;
   private final SubjectRepository subjectRepository;
 
-  @Override public StudentCreateResponse create(CreateStudentRequest request) {
+  @Override public StudentCreateResponse create(StudentCreateRequest request) {
     var department = createDepartment(request);
 
     var isLearningRelations = createSubjects(request);
@@ -43,7 +43,7 @@ public class StudentServiceAdapter implements StudentService {
     return StudentCreateResponse.from(student);
   }
 
-  private List<IsLearning> createSubjects(CreateStudentRequest request) {
+  private List<IsLearning> createSubjects(StudentCreateRequest request) {
     return request.subjects()
       .stream()
       .map(data -> {
@@ -55,7 +55,7 @@ public class StudentServiceAdapter implements StudentService {
       }).collect(Collectors.toList());
   }
 
-  private Department createDepartment(CreateStudentRequest request) {
+  private Department createDepartment(StudentCreateRequest request) {
     var department = Department.from(request.department());
     departmentRepository.create(department);
     return department;

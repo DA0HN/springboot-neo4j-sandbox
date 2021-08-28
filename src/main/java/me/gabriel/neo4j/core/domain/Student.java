@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import me.gabriel.neo4j.application.api.request.CreateStudentRequest;
+import me.gabriel.neo4j.application.api.request.StudentCreateRequest;
 import me.gabriel.neo4j.infra.db.repositories.NodeIdentity;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
@@ -53,7 +53,7 @@ public class Student extends NodeIdentity {
     this.isLearning = isLearning;
   }
 
-  public static Student from(CreateStudentRequest request) {
+  public static Student from(StudentCreateRequest request) {
     var student = new Student();
     student.setName(request.name());
     student.setCountry(request.country());

@@ -1,7 +1,7 @@
 package me.gabriel.neo4j.utils;
 
-import me.gabriel.neo4j.application.api.request.CreateDepartmentRequest;
-import me.gabriel.neo4j.application.api.request.CreateSubjectRequest;
+import me.gabriel.neo4j.application.api.request.DepartmentCreateRequest;
+import me.gabriel.neo4j.application.api.request.SubjectCreateRequest;
 import me.gabriel.neo4j.application.api.response.IsLearningCreateResponse;
 import me.gabriel.neo4j.application.api.response.StudentCreateResponse;
 import org.assertj.core.api.AbstractAssert;
@@ -53,7 +53,7 @@ public class StudentCreateResponseAssert extends AbstractAssert<StudentCreateRes
     return this;
   }
 
-  public StudentCreateResponseAssert hasSameDepartmentName(CreateDepartmentRequest department) {
+  public StudentCreateResponseAssert hasSameDepartmentName(DepartmentCreateRequest department) {
     isNotNull();
     if(!actual.department().name().equals(department.name())) {
       failWithMessage(
@@ -103,11 +103,11 @@ public class StudentCreateResponseAssert extends AbstractAssert<StudentCreateRes
     return this;
   }
 
-  public StudentCreateResponseAssert containsTheseSubjects(List<CreateSubjectRequest> subjects) {
+  public StudentCreateResponseAssert containsTheseSubjects(List<SubjectCreateRequest> subjects) {
     isNotNull();
 
     var subjectNames = subjects.stream()
-      .map(CreateSubjectRequest::name)
+      .map(SubjectCreateRequest::name)
       .collect(Collectors.toList());
 
     actual.isLearning()

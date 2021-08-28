@@ -6,11 +6,11 @@ import java.util.List;
  * @author daohn
  * @since 19/08/2021
  */
-public record CreateStudentRequest(
+public record StudentCreateRequest(
   String name,
   Integer birthYear,
   String country,
-  List<CreateSubjectRequest> subjects,
-  CreateDepartmentRequest department
+  List<SubjectCreateRequest> subjects,
+  DepartmentCreateRequest department
 ) {
 }

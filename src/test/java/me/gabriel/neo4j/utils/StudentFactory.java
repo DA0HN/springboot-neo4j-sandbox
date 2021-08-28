@@ -1,8 +1,8 @@
 package me.gabriel.neo4j.utils;
 
-import me.gabriel.neo4j.application.api.request.CreateDepartmentRequest;
-import me.gabriel.neo4j.application.api.request.CreateStudentRequest;
-import me.gabriel.neo4j.application.api.request.CreateSubjectRequest;
+import me.gabriel.neo4j.application.api.request.DepartmentCreateRequest;
+import me.gabriel.neo4j.application.api.request.StudentCreateRequest;
+import me.gabriel.neo4j.application.api.request.SubjectCreateRequest;
 import me.gabriel.neo4j.core.domain.Department;
 import me.gabriel.neo4j.core.domain.IsLearning;
 import me.gabriel.neo4j.core.domain.Student;
@@ -17,17 +17,17 @@ public class StudentFactory {
   public StudentFactory() {
   }
 
-  public CreateStudentRequest createStudentRequest() {
-    return new CreateStudentRequest(
+  public StudentCreateRequest createStudentRequest() {
+    return new StudentCreateRequest(
       "name",
       1999,
       "country",
       asList(
-        new CreateSubjectRequest("name 1", 1L),
-        new CreateSubjectRequest("name 2", 2L),
-        new CreateSubjectRequest("name 3", 3L)
+        new SubjectCreateRequest("name 1", 1L),
+        new SubjectCreateRequest("name 2", 2L),
+        new SubjectCreateRequest("name 3", 3L)
       ),
-      new CreateDepartmentRequest("department")
+      new DepartmentCreateRequest("department")
     );
   }
 

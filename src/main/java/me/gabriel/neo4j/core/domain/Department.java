@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import me.gabriel.neo4j.application.api.request.CreateDepartmentRequest;
+import me.gabriel.neo4j.application.api.request.DepartmentCreateRequest;
 import me.gabriel.neo4j.infra.db.repositories.NodeIdentity;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
@@ -28,7 +28,7 @@ public class Department extends NodeIdentity {
     this.name = name;
   }
 
-  public static Department from(CreateDepartmentRequest request) {
+  public static Department from(DepartmentCreateRequest request) {
     return new Department(request.name());
   }
 }
