@@ -3,7 +3,7 @@ package me.gabriel.neo4j.application.api.controllers;
 import lombok.AllArgsConstructor;
 import me.gabriel.neo4j.application.api.request.StudentCreateRequest;
 import me.gabriel.neo4j.application.api.response.ResponseBase;
-import me.gabriel.neo4j.application.api.response.StudentCreateResponse;
+import me.gabriel.neo4j.application.api.response.StudentResponse;
 import me.gabriel.neo4j.core.ports.StudentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,12 +23,12 @@ public class StudentController {
   private StudentService studentService;
 
   @PostMapping
-  public ResponseEntity<ResponseBase<StudentCreateResponse>> create(
+  public ResponseEntity<ResponseBase<StudentResponse>> create(
     @RequestBody StudentCreateRequest request
   ) {
     var studentCreateRequest = this.studentService.create(request);
 
-    var response = new ResponseBase<StudentCreateResponse>()
+    var response = new ResponseBase<StudentResponse>()
       .data(studentCreateRequest)
       .message("Student created successfully");
 

@@ -2,8 +2,8 @@ package me.gabriel.neo4j.utils;
 
 import me.gabriel.neo4j.application.api.request.DepartmentCreateRequest;
 import me.gabriel.neo4j.application.api.request.SubjectCreateRequest;
-import me.gabriel.neo4j.application.api.response.IsLearningCreateResponse;
-import me.gabriel.neo4j.application.api.response.StudentCreateResponse;
+import me.gabriel.neo4j.application.api.response.IsLearningResponse;
+import me.gabriel.neo4j.application.api.response.StudentResponse;
 import org.assertj.core.api.AbstractAssert;
 
 import java.util.List;
@@ -14,18 +14,18 @@ import java.util.stream.Collectors;
  * @author daohn
  * @since 21/08/2021
  */
-public class StudentCreateResponseAssert extends AbstractAssert<StudentCreateResponseAssert, StudentCreateResponse> {
+public class StudentResponseAssert extends AbstractAssert<StudentResponseAssert, StudentResponse> {
 
   // https://www.baeldung.com/assertj-custom-assertion
-  protected StudentCreateResponseAssert(StudentCreateResponse actual) {
-    super(actual, StudentCreateResponseAssert.class);
+  protected StudentResponseAssert(StudentResponse actual) {
+    super(actual, StudentResponseAssert.class);
   }
 
-  public static StudentCreateResponseAssert assertThat(StudentCreateResponse actual) {
-    return new StudentCreateResponseAssert(actual);
+  public static StudentResponseAssert assertThat(StudentResponse actual) {
+    return new StudentResponseAssert(actual);
   }
 
-  public StudentCreateResponseAssert hasName(String name) {
+  public StudentResponseAssert hasName(String name) {
     isNotNull();
     if(!actual.name().equalsIgnoreCase(name)) {
       failWithMessage(
@@ -37,7 +37,7 @@ public class StudentCreateResponseAssert extends AbstractAssert<StudentCreateRes
     return this;
   }
 
-  public StudentCreateResponseAssert hasId() {
+  public StudentResponseAssert hasId() {
     isNotNull();
     if(actual.id() == null) {
       failWithMessage("Expected student id to be non null");
@@ -45,7 +45,7 @@ public class StudentCreateResponseAssert extends AbstractAssert<StudentCreateRes
     return this;
   }
 
-  public StudentCreateResponseAssert hasDepartment() {
+  public StudentResponseAssert hasDepartment() {
     isNotNull();
     if(actual.department() == null) {
       failWithMessage("Expected department to be non null");
@@ -53,7 +53,7 @@ public class StudentCreateResponseAssert extends AbstractAssert<StudentCreateRes
     return this;
   }
 
-  public StudentCreateResponseAssert hasSameDepartmentName(DepartmentCreateRequest department) {
+  public StudentResponseAssert hasSameDepartmentName(DepartmentCreateRequest department) {
     isNotNull();
     if(!actual.department().name().equals(department.name())) {
       failWithMessage(
@@ -65,7 +65,7 @@ public class StudentCreateResponseAssert extends AbstractAssert<StudentCreateRes
     return this;
   }
 
-  public StudentCreateResponseAssert hasCountry(String country) {
+  public StudentResponseAssert hasCountry(String country) {
     isNotNull();
     if(!actual.country().equals(country)) {
       failWithMessage(
@@ -77,7 +77,7 @@ public class StudentCreateResponseAssert extends AbstractAssert<StudentCreateRes
     return this;
   }
 
-  public StudentCreateResponseAssert hasBirthYear(Integer birthYear) {
+  public StudentResponseAssert hasBirthYear(Integer birthYear) {
     isNotNull();
     if(!actual.birthYear().equals(birthYear)) {
       failWithMessage(
@@ -89,7 +89,7 @@ public class StudentCreateResponseAssert extends AbstractAssert<StudentCreateRes
     return this;
   }
 
-  public StudentCreateResponseAssert subjectsRelationshipWereCreated() {
+  public StudentResponseAssert subjectsRelationshipWereCreated() {
     isNotNull();
 
     actual.isLearning()
@@ -103,7 +103,7 @@ public class StudentCreateResponseAssert extends AbstractAssert<StudentCreateRes
     return this;
   }
 
-  public StudentCreateResponseAssert containsTheseSubjects(List<SubjectCreateRequest> subjects) {
+  public StudentResponseAssert containsTheseSubjects(List<SubjectCreateRequest> subjects) {
     isNotNull();
 
     var subjectNames = subjects.stream()
@@ -112,7 +112,7 @@ public class StudentCreateResponseAssert extends AbstractAssert<StudentCreateRes
 
     actual.isLearning()
       .stream()
-      .map(IsLearningCreateResponse::subject)
+      .map(IsLearningResponse::subject)
       .forEach(actualSubject -> {
 
         Objects.requireNonNull(actualSubject, "Expected Subject be not null");

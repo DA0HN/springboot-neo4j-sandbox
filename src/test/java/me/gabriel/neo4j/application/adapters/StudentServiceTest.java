@@ -14,7 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static me.gabriel.neo4j.utils.StudentCreateResponseAssert.assertThat;
+import static me.gabriel.neo4j.utils.StudentResponseAssert.assertThat;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.when;
 

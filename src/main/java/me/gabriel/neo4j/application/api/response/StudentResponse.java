@@ -8,22 +8,22 @@ import java.util.List;
  * @author daohn
  * @since 21/08/2021
  */
-public record StudentCreateResponse(
+public record StudentResponse(
   Long id,
   String name,
   Integer birthYear,
   String country,
-  List<IsLearningCreateResponse> isLearning,
-  DepartmentCreateResponse department
+  List<IsLearningResponse> isLearning,
+  DepartmentResponse department
 ) {
-  public static StudentCreateResponse from(Student student) {
-    return new StudentCreateResponse(
+  public static StudentResponse from(Student student) {
+    return new StudentResponse(
       student.getId(),
       student.getName(),
       student.getBirthYear(),
       student.getCountry(),
-      IsLearningCreateResponse.from(student.getIsLearning()),
-      DepartmentCreateResponse.from(student.getDepartment())
+      IsLearningResponse.from(student.getIsLearning()),
+      DepartmentResponse.from(student.getDepartment())
     );
   }
 }

@@ -1,7 +1,7 @@
 package me.gabriel.neo4j.core.ports;
 
 import me.gabriel.neo4j.application.api.request.StudentCreateRequest;
-import me.gabriel.neo4j.application.api.response.StudentCreateResponse;
+import me.gabriel.neo4j.application.api.response.StudentResponse;
 
 /**
  * @author daohn
@@ -9,6 +9,7 @@ import me.gabriel.neo4j.application.api.response.StudentCreateResponse;
  */
 public interface StudentService {
 
-  StudentCreateResponse create(StudentCreateRequest request);
+  StudentResponse create(StudentCreateRequest request);
 
+  void findById(Long studentId);
 }
