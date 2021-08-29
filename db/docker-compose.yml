@@ -14,6 +14,7 @@ services:
       - ./runtime/logs:/logs
       - ./runtime/import:/var/lib/neo4j/import
       - ./runtime/plugins:/plugins
-      - ./cypher_query.cql:/cyphers/interviews.cql
+      - ./interviwer_data.cql:/cyphers/interviews.cql
+      - ./student_data.cql:/cyphers/student_data.cql
     environment:
       - NEO4J_AUTH=none
