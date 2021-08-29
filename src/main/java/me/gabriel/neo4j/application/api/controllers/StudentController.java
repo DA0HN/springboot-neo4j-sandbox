@@ -6,6 +6,8 @@ import me.gabriel.neo4j.application.api.response.ResponseBase;
 import me.gabriel.neo4j.application.api.response.StudentResponse;
 import me.gabriel.neo4j.core.ports.StudentService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +34,16 @@ public class StudentController {
       .data(studentCreateRequest)
       .message("Student created successfully");
 
+    return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("/{studentId}")
+  public ResponseEntity<ResponseBase<StudentResponse>> findById(@PathVariable("studentId") Long studentId) {
+    var foundStudent = this.studentService.findById(studentId);
+
+    var response = new ResponseBase<StudentResponse>()
+      .data(foundStudent)
+      .message("Student found!");
     return ResponseEntity.ok(response);
   }
 
