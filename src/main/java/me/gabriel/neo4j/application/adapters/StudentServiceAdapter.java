@@ -6,6 +6,7 @@ import me.gabriel.neo4j.application.api.response.StudentResponse;
 import me.gabriel.neo4j.core.domain.Department;
 import me.gabriel.neo4j.core.domain.IsLearning;
 import me.gabriel.neo4j.core.domain.Student;
+import me.gabriel.neo4j.core.domain.StudentNotFoundException;
 import me.gabriel.neo4j.core.domain.Subject;
 import me.gabriel.neo4j.core.ports.DepartmentRepository;
 import me.gabriel.neo4j.core.ports.StudentRepository;
@@ -14,6 +15,7 @@ import me.gabriel.neo4j.core.ports.SubjectRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -41,6 +43,18 @@ public class StudentServiceAdapter implements StudentService {
     student = this.studentRepository.create(student);
 
     return StudentResponse.from(student);
+  }
+
+  @Override public StudentResponse findById(Long studentId) {
+
+    if(Objects.isNull(studentId)) {
+      throw new IllegalArgumentException("Student id must be not null");
+    }
+
+    return this.studentRepository
+      .findById(studentId)
+      .map(StudentResponse::from)
+      .orElseThrow(() -> new StudentNotFoundException("Student with id " + studentId + " not found."));
   }
 
   private List<IsLearning> createSubjects(StudentCreateRequest request) {

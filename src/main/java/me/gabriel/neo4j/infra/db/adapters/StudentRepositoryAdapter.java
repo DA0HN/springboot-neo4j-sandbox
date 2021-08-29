@@ -6,6 +6,8 @@ import me.gabriel.neo4j.core.ports.StudentRepository;
 import me.gabriel.neo4j.infra.db.repositories.StudentNeo4jRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 /**
  * @author daohn
  * @since 19/08/2021
@@ -18,5 +20,9 @@ public class StudentRepositoryAdapter implements StudentRepository {
 
   @Override public Student create(Student student) {
     return this.repository.save(student);
+  }
+
+  @Override public Optional<Student> findById(Long studentId) {
+    return this.repository.findById(studentId);
   }
 }

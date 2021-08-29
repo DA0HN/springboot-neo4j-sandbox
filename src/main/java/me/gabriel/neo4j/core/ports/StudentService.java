@@ -11,5 +11,5 @@ public interface StudentService {
 
   StudentResponse create(StudentCreateRequest request);
 
-  void findById(Long studentId);
+  StudentResponse findById(Long studentId);
 }
