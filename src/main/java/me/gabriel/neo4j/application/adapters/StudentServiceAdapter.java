@@ -31,9 +31,9 @@ public class StudentServiceAdapter implements StudentService {
   private final SubjectRepository subjectRepository;
 
   @Override public StudentResponse create(StudentCreateRequest request) {
-    var department = createDepartment(request);
+    var department = this.createDepartment(request);
 
-    var isLearningRelations = createSubjects(request);
+    var isLearningRelations = this.createSubjects(request);
 
     var student = Student.from(request);
 
@@ -71,7 +71,7 @@ public class StudentServiceAdapter implements StudentService {
 
   private Department createDepartment(StudentCreateRequest request) {
     var department = Department.from(request.department());
-    departmentRepository.create(department);
+    this.departmentRepository.create(department);
     return department;
   }
 }

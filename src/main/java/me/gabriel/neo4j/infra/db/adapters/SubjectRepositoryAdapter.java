@@ -19,10 +19,10 @@ public class SubjectRepositoryAdapter implements SubjectRepository {
   private final SubjectNeo4jRespository repository;
 
   @Override public Subject create(Subject subject) {
-    return repository.save(subject);
+    return this.repository.save(subject);
   }
 
   @Override public List<Subject> createAll(List<Subject> subjects) {
-    return repository.saveAll(subjects);
+    return this.repository.saveAll(subjects);
   }
 }

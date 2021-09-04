@@ -37,8 +37,8 @@ public class StudentFactory {
       "name",
       "country",
       1999,
-      department(),
-      isLearningList()
+      this.department(),
+      this.isLearningList()
     );
   }
 
@@ -56,7 +56,7 @@ public class StudentFactory {
 
   public List<IsLearning> isLearningList() {
 
-    var subjects = subjectList();
+    var subjects = this.subjectList();
 
     return Arrays.asList(
       new IsLearning(1L, 1L, subjects[0]),

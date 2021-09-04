@@ -50,21 +50,21 @@ class StudentServiceTest {
   @BeforeEach
   void setUp() {
     this.service = new StudentServiceAdapter(
-      studentRepository,
-      departmentRepository,
-      subjectRepository
+      this.studentRepository,
+      this.departmentRepository,
+      this.subjectRepository
     );
   }
 
   @Test
   void whenValidRequestShouldCreateStudentAndRelationship() {
-    when(departmentRepository.create(isA(DEPARTMENT_REPOSITORY_ARG))).thenReturn(studentFactory.department());
-    when(studentRepository.create(isA(STUDENT_REPOSITORY_ARG))).thenReturn(studentFactory.student());
-    when(subjectRepository.create(isA(SUBJECT_REPOSITORY_ARG))).thenReturn(studentFactory.subjectList()[0]);
+    when(this.departmentRepository.create(isA(DEPARTMENT_REPOSITORY_ARG))).thenReturn(this.studentFactory.department());
+    when(this.studentRepository.create(isA(STUDENT_REPOSITORY_ARG))).thenReturn(this.studentFactory.student());
+    when(this.subjectRepository.create(isA(SUBJECT_REPOSITORY_ARG))).thenReturn(this.studentFactory.subjectList()[0]);
 
-    var request = studentFactory.createStudentRequest();
+    var request = this.studentFactory.createStudentRequest();
 
-    var response = service.create(request);
+    var response = this.service.create(request);
 
     assertThat(response)
       .hasId()
@@ -78,24 +78,24 @@ class StudentServiceTest {
   @Test
   void whenValidIdShouldFindStudentById() {
 
-    when(studentRepository.findById(isA(Long.class))).thenReturn(Optional.of(studentFactory.student()));
+    when(this.studentRepository.findById(isA(Long.class))).thenReturn(Optional.of(this.studentFactory.student()));
 
-    var response = service.findById(STUDENT_ID);
+    var response = this.service.findById(STUDENT_ID);
 
-    verify(studentRepository, times(1)).findById(isA(Long.class));
+    verify(this.studentRepository, times(1)).findById(isA(Long.class));
     assertThat(response).isNotNull();
   }
 
   @Test
   void whenNotFoundStudentShouldThrowException() {
-    when(studentRepository.findById(isA(Long.class))).thenReturn(Optional.empty());
+    when(this.studentRepository.findById(isA(Long.class))).thenReturn(Optional.empty());
 
     assertThrows(
       StudentNotFoundException.class,
-      () -> service.findById(STUDENT_ID)
+      () -> this.service.findById(STUDENT_ID)
     );
 
-    verify(studentRepository, times(1)).findById(isA(Long.class));
+    verify(this.studentRepository, times(1)).findById(isA(Long.class));
   }
 
   @Test
@@ -103,12 +103,12 @@ class StudentServiceTest {
 
     var exception = assertThrows(
       IllegalArgumentException.class,
-      () -> service.findById(null)
+      () -> this.service.findById(null)
     );
 
     assertEquals("Student id must be not null", exception.getMessage());
 
-    verify(studentRepository, never()).findById(isA(Long.class));
+    verify(this.studentRepository, never()).findById(isA(Long.class));
   }
 
 }

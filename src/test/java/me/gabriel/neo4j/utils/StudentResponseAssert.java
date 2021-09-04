@@ -26,39 +26,39 @@ public class StudentResponseAssert extends AbstractAssert<StudentResponseAssert,
   }
 
   public StudentResponseAssert hasName(String name) {
-    isNotNull();
-    if(!actual.name().equalsIgnoreCase(name)) {
-      failWithMessage(
+    this.isNotNull();
+    if(!this.actual.name().equalsIgnoreCase(name)) {
+      this.failWithMessage(
         "Expected student to have name '%s' but was '%s'",
         name,
-        actual.name()
+        this.actual.name()
       );
     }
     return this;
   }
 
   public StudentResponseAssert hasId() {
-    isNotNull();
-    if(actual.id() == null) {
-      failWithMessage("Expected student id to be non null");
+    this.isNotNull();
+    if(this.actual.id() == null) {
+      this.failWithMessage("Expected student id to be non null");
     }
     return this;
   }
 
   public StudentResponseAssert hasDepartment() {
-    isNotNull();
-    if(actual.department() == null) {
-      failWithMessage("Expected department to be non null");
+    this.isNotNull();
+    if(this.actual.department() == null) {
+      this.failWithMessage("Expected department to be non null");
     }
     return this;
   }
 
   public StudentResponseAssert hasSameDepartmentName(DepartmentCreateRequest department) {
-    isNotNull();
-    if(!actual.department().name().equals(department.name())) {
-      failWithMessage(
+    this.isNotNull();
+    if(!this.actual.department().name().equals(department.name())) {
+      this.failWithMessage(
         "Expected department to have name '%s' but was '%s'",
-        actual.department().name(),
+        this.actual.department().name(),
         department.name()
       );
     }
@@ -66,11 +66,11 @@ public class StudentResponseAssert extends AbstractAssert<StudentResponseAssert,
   }
 
   public StudentResponseAssert hasCountry(String country) {
-    isNotNull();
-    if(!actual.country().equals(country)) {
-      failWithMessage(
+    this.isNotNull();
+    if(!this.actual.country().equals(country)) {
+      this.failWithMessage(
         "Expected country to be '%s' but was '%s'",
-        actual.country(),
+        this.actual.country(),
         country
       );
     }
@@ -78,11 +78,11 @@ public class StudentResponseAssert extends AbstractAssert<StudentResponseAssert,
   }
 
   public StudentResponseAssert hasBirthYear(Integer birthYear) {
-    isNotNull();
-    if(!actual.birthYear().equals(birthYear)) {
-      failWithMessage(
+    this.isNotNull();
+    if(!this.actual.birthYear().equals(birthYear)) {
+      this.failWithMessage(
         "Expected birth year to be '%s' but was '%s'",
-        actual.birthYear(),
+        this.actual.birthYear(),
         birthYear
       );
     }
@@ -90,13 +90,13 @@ public class StudentResponseAssert extends AbstractAssert<StudentResponseAssert,
   }
 
   public StudentResponseAssert subjectsRelationshipWereCreated() {
-    isNotNull();
+    this.isNotNull();
 
-    actual.isLearning()
+    this.actual.isLearning()
       .stream()
       .filter(isLearning -> isLearning.id() == null)
       .findAny()
-      .ifPresent(isLearning -> failWithMessage(
+      .ifPresent(isLearning -> this.failWithMessage(
         "Expected the relationship 'isLearning' to be created correctly, but found id null"
       ));
 
@@ -104,13 +104,13 @@ public class StudentResponseAssert extends AbstractAssert<StudentResponseAssert,
   }
 
   public StudentResponseAssert containsTheseSubjects(List<SubjectCreateRequest> subjects) {
-    isNotNull();
+    this.isNotNull();
 
     var subjectNames = subjects.stream()
       .map(SubjectCreateRequest::name)
       .collect(Collectors.toList());
 
-    actual.isLearning()
+    this.actual.isLearning()
       .stream()
       .map(IsLearningResponse::subject)
       .forEach(actualSubject -> {
@@ -118,11 +118,11 @@ public class StudentResponseAssert extends AbstractAssert<StudentResponseAssert,
         Objects.requireNonNull(actualSubject, "Expected Subject be not null");
 
         if(!subjectNames.contains(actualSubject.name())) {
-          failWithMessage("Expected Subject %s to be created correctly, but not found");
+          this.failWithMessage("Expected Subject %s to be created correctly, but not found");
         }
         else {
           if(actualSubject.id() == null) {
-            failWithMessage("Expected Subject %s to be created correctly, but found id null");
+            this.failWithMessage("Expected Subject %s to be created correctly, but found id null");
           }
         }
       });
