@@ -12,7 +12,7 @@ set -m
 /docker-entrypoint.sh neo4j &
 
 log_info "Waiting until neo4j stats at :7474 ..."
-wget --quiet --tries=10 --waitretry=2 -O /dev/null http://localhost:7474
+wget --quiet --tries=10 --waitretry=10 -O /dev/null http://localhost:7474
 
 if [ -d "/cyphers" ]; then
   log_info "Deleting all relations"
