@@ -35,10 +35,7 @@ public class StudentServiceAdapter implements StudentService {
 
     var isLearningRelations = this.createSubjects(request);
 
-    var student = Student.from(request);
-
-    student.setIsLearning(isLearningRelations);
-    student.setDepartment(department);
+    Student student = this.setupRelationship(request, department, isLearningRelations);
 
     student = this.studentRepository.create(student);
 
@@ -55,6 +52,15 @@ public class StudentServiceAdapter implements StudentService {
       .findById(studentId)
       .map(StudentResponse::from)
       .orElseThrow(() -> new StudentNotFoundException("Student with id " + studentId + " not found."));
+  }
+
+  private Student setupRelationship(StudentCreateRequest request, Department department, List<IsLearning> isLearningRelations) {
+    var student = Student.from(request);
+
+    student.setIsLearning(isLearningRelations);
+    student.setDepartment(department);
+
+    return student;
   }
 
   private List<IsLearning> createSubjects(StudentCreateRequest request) {
