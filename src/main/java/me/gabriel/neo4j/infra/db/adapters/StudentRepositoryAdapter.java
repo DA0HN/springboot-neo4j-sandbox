@@ -28,6 +28,6 @@ public class StudentRepositoryAdapter implements StudentRepository {
   }
 
   @Override public List<Student> findByName(String studentName) {
-    return this.repository.findByName(studentName);
+    return this.repository.findAllStudentsByName(studentName);
   }
 }
