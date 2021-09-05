@@ -14,6 +14,20 @@ import java.util.List;
 @Repository
 public interface StudentNeo4jRepository extends Neo4jRepository<Student, Long> {
 
+  /**
+   * Para o SDN 6 é necessária a utilização do 'collect()'
+   * @see
+   * <a href="https://docs.spring.io/spring-data/neo4j/docs/current/reference/html/#custom-queries.for-relationships.one.record">
+   * neo4j docs - custom queries for relationships one records
+   * </a>
+   * @see
+   * <a href="https://github.com/spring-projects/spring-data-neo4j/issues/2362">
+   *  ISSUE 2362 - Spring Data Neo4j
+   * </a>
+   *
+   * @param name Nome que será utilizado na consulta
+   * @return Uma lista de estudantes que contém a palavra desejada
+   */
   @Query("MATCH (department:Department)<-[belongs:BELONGS_TO]-(student:Student)-[isLearning:IS_LEARNING]->(subject:Subject) " +
          "WHERE toLower(student.name) CONTAINS toLower($name) " +
          "RETURN student, " +
