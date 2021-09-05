@@ -2,6 +2,7 @@ package me.gabriel.neo4j.core.ports;
 
 import me.gabriel.neo4j.core.domain.Student;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -13,4 +14,6 @@ public interface StudentRepository {
   Student create(Student student);
 
   Optional<Student> findById(Long studentId);
+
+  List<Student> findByName(String studentName);
 }

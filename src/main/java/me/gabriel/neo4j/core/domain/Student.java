@@ -20,7 +20,7 @@ import static org.springframework.data.neo4j.core.schema.Relationship.Direction.
  */
 @Getter
 @Setter
-@Node(labels = {"Student"})
+@Node
 @NoArgsConstructor
 @AllArgsConstructor
 public class Student extends NodeIdentity {
@@ -31,10 +31,10 @@ public class Student extends NodeIdentity {
   @Property(name = "birth_year")
   private Integer birthYear;
 
-  @Relationship(type = "BELONGS_TO", direction = OUTGOING)
+  @Relationship(value = "BELONGS_TO", direction = OUTGOING)
   private Department department;
 
-  @Relationship(type = "IS_LEARNING", direction = OUTGOING)
+  @Relationship(value = "IS_LEARNING", direction = OUTGOING)
   private List<IsLearning> isLearning;
 
   public Student(

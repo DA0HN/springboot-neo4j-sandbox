@@ -7,7 +7,6 @@ import lombok.Setter;
 import me.gabriel.neo4j.application.api.request.DepartmentCreateRequest;
 import me.gabriel.neo4j.infra.db.repositories.NodeIdentity;
 import org.springframework.data.neo4j.core.schema.Node;
-import org.springframework.data.neo4j.core.schema.Property;
 
 /**
  * @author daohn
@@ -17,10 +16,9 @@ import org.springframework.data.neo4j.core.schema.Property;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Node(labels = {"Department"})
+@Node
 public class Department extends NodeIdentity {
 
-  @Property(name = "department_name")
   private String name;
 
   public Department(Long id, String name) {

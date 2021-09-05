@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @author daohn
@@ -47,4 +50,16 @@ public class StudentController {
     return ResponseEntity.ok(response);
   }
 
+  @GetMapping
+  public ResponseEntity<ResponseBase<List<StudentResponse>>> findByName(@RequestParam("name") String name) {
+    var foundStudent = this.studentService.findByName(name);
+
+    String message = foundStudent.isEmpty() ? "No students found with name '" + name + "'." : "Student found!";
+
+    var response = new ResponseBase<List<StudentResponse>>()
+      .data(foundStudent)
+      .message(message);
+
+    return ResponseEntity.ok(response);
+  }
 }

@@ -54,6 +54,13 @@ public class StudentServiceAdapter implements StudentService {
       .orElseThrow(() -> new StudentNotFoundException("Student with id " + studentId + " not found."));
   }
 
+  @Override public List<StudentResponse> findByName(String name) {
+    return this.studentRepository.findByName(name)
+      .stream()
+      .map(StudentResponse::from)
+      .collect(Collectors.toList());
+  }
+
   private Student setupRelationship(StudentCreateRequest request, Department department, List<IsLearning> isLearningRelations) {
     var student = Student.from(request);
 
