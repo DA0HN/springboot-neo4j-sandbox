@@ -1,5 +1,7 @@
 package me.gabriel.neo4j.application.adapters;
 
+import me.gabriel.neo4j.application.api.request.StudentCreateRequest;
+import me.gabriel.neo4j.application.api.response.StudentResponse;
 import me.gabriel.neo4j.core.domain.Department;
 import me.gabriel.neo4j.core.domain.Student;
 import me.gabriel.neo4j.core.domain.StudentNotFoundException;
@@ -9,6 +11,7 @@ import me.gabriel.neo4j.core.ports.StudentRepository;
 import me.gabriel.neo4j.core.ports.StudentService;
 import me.gabriel.neo4j.core.ports.SubjectRepository;
 import me.gabriel.neo4j.utils.StudentFactory;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import static java.util.Arrays.asList;
 import static me.gabriel.neo4j.utils.StudentResponseAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -34,7 +38,7 @@ import static org.mockito.Mockito.when;
 class StudentServiceTest {
 
   private static final long STUDENT_ID = 1L;
-
+  private static final String STUDENT_NAME = "studentName";
   private static final Class<Department> DEPARTMENT_REPOSITORY_ARG = Department.class;
   private static final Class<Student> STUDENT_REPOSITORY_ARG = Student.class;
   private static final Class<Subject> SUBJECT_REPOSITORY_ARG = Subject.class;
@@ -66,13 +70,7 @@ class StudentServiceTest {
 
     var response = this.service.create(request);
 
-    assertThat(response)
-      .hasId()
-      .hasName(request.name())
-      .hasBirthYear(request.birthYear())
-      .hasCountry(request.country())
-      .subjectsRelationshipWereCreated().containsTheseSubjects(request.subjects())
-      .hasDepartment().hasSameDepartmentName(request.department());
+    this.assertStudentResponse(request, response);
   }
 
   @Test
@@ -109,6 +107,35 @@ class StudentServiceTest {
     assertEquals("Student id must be not null", exception.getMessage());
 
     verify(this.studentRepository, never()).findById(isA(Long.class));
+  }
+
+  @Test
+  void whenNameIsValidShouldReturnStudent() {
+    when(this.studentRepository.findByName(isA(String.class))).thenReturn(asList(
+      this.studentFactory.student(),
+      this.studentFactory.student(),
+      this.studentFactory.student()
+    ));
+
+    var response = this.service.findByName(STUDENT_NAME);
+
+    verify(this.studentRepository, times(1)).findByName(isA(String.class));
+
+    int EXPECTED_SIZE_LIST = 3;
+
+    Assertions.assertThat(response).isNotNull()
+      .hasSize(EXPECTED_SIZE_LIST);
+  }
+
+
+  private void assertStudentResponse(StudentCreateRequest request, StudentResponse response) {
+    assertThat(response)
+      .hasId()
+      .hasName(request.name())
+      .hasBirthYear(request.birthYear())
+      .hasCountry(request.country())
+      .subjectsRelationshipWereCreated().containsTheseSubjects(request.subjects())
+      .hasDepartment().hasSameDepartmentName(request.department());
   }
 
 }
