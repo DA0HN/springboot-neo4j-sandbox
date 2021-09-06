@@ -54,8 +54,13 @@ public class StudentServiceAdapter implements StudentService {
       .orElseThrow(() -> new StudentNotFoundException("Student with id " + studentId + " not found."));
   }
 
-  @Override public List<StudentResponse> findByName(String name) {
-    return this.studentRepository.findByName(name)
+  @Override public List<StudentResponse> findByName(String partialName) {
+
+    if(partialName == null) {
+      throw new IllegalArgumentException("Partial name must be not null");
+    }
+
+    return this.studentRepository.findByName(partialName)
       .stream()
       .map(StudentResponse::from)
       .collect(Collectors.toList());
