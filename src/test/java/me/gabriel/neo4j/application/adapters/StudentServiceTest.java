@@ -110,16 +110,16 @@ class StudentServiceTest {
   }
 
   @Test
-  void whenPartialNameIsValidShouldReturnStudent() {
-    when(this.studentRepository.findByName(isA(String.class))).thenReturn(asList(
+  void whenPartialNameIsValidShouldReturnStudents() {
+    when(this.studentRepository.findAllByPartialName(isA(String.class))).thenReturn(asList(
       this.studentFactory.student(),
       this.studentFactory.student(),
       this.studentFactory.student()
     ));
 
-    var response = this.service.findByName(STUDENT_NAME);
+    var response = this.service.findAllByPartialName(STUDENT_NAME);
 
-    verify(this.studentRepository, times(1)).findByName(isA(String.class));
+    verify(this.studentRepository, times(1)).findAllByPartialName(isA(String.class));
 
     int EXPECTED_SIZE_LIST = 3;
 
@@ -134,7 +134,7 @@ class StudentServiceTest {
 
     var exception = assertThrows(
       IllegalArgumentException.class,
-      () -> this.service.findByName(PARTIAL_STUDENT_NAME)
+      () -> this.service.findAllByPartialName(PARTIAL_STUDENT_NAME)
     );
 
     assertEquals("Partial name must be not null", exception.getMessage());

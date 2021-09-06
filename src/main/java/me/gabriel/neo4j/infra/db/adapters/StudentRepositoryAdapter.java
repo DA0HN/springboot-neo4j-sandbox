@@ -27,7 +27,7 @@ public class StudentRepositoryAdapter implements StudentRepository {
     return this.repository.findById(studentId);
   }
 
-  @Override public List<Student> findByName(String studentName) {
-    return this.repository.findAllStudentsByName(studentName);
+  @Override public List<Student> findAllByPartialName(String studentName) {
+    return this.repository.findAllStudentsByPartialName(studentName);
   }
 }

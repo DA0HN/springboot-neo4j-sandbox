@@ -14,5 +14,5 @@ public interface StudentService {
   StudentResponse create(StudentCreateRequest request);
 
   StudentResponse findById(Long studentId);
-  List<StudentResponse> findByName(String name);
+  List<StudentResponse> findAllByPartialName(String name);
 }

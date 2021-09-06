@@ -15,5 +15,5 @@ public interface StudentRepository {
 
   Optional<Student> findById(Long studentId);
 
-  List<Student> findByName(String studentName);
+  List<Student> findAllByPartialName(String studentName);
 }

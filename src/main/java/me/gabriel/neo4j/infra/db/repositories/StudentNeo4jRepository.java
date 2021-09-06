@@ -36,5 +36,5 @@ public interface StudentNeo4jRepository extends Neo4jRepository<Student, Long> {
          "collect(isLearning), " +
          "collect(subject)"
   )
-  List<Student> findAllStudentsByName(String name);
+  List<Student> findAllStudentsByPartialName(String name);
 }

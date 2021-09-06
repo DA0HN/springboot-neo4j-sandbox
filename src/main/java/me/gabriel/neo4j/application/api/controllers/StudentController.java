@@ -52,7 +52,7 @@ public class StudentController {
 
   @GetMapping
   public ResponseEntity<ResponseBase<List<StudentResponse>>> findByName(@RequestParam("name") String name) {
-    var foundStudent = this.studentService.findByName(name);
+    var foundStudent = this.studentService.findAllByPartialName(name);
 
     String message = foundStudent.isEmpty() ? "No students found with name '" + name + "'." : "Student found!";
 
