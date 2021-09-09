@@ -118,11 +118,11 @@ public class StudentResponseAssert extends AbstractAssert<StudentResponseAssert,
         Objects.requireNonNull(actualSubject, "Expected Subject be not null");
 
         if(!subjectNames.contains(actualSubject.name())) {
-          this.failWithMessage("Expected Subject %s to be created correctly, but not found");
+          this.failWithMessage("Expected Subject %s to be created correctly, but not found", actualSubject.name());
         }
         else {
           if(actualSubject.id() == null) {
-            this.failWithMessage("Expected Subject %s to be created correctly, but found id null");
+            this.failWithMessage("Expected Subject %s to be created correctly, but found id null", actualSubject.name());
           }
         }
       });
