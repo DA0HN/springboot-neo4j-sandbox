@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import me.gabriel.neo4j.infra.db.repositories.NodeIdentity;
 import org.springframework.data.neo4j.core.schema.Node;
 
@@ -13,9 +14,10 @@ import org.springframework.data.neo4j.core.schema.Node;
  */
 @Setter
 @Getter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Node(labels = {"Subject"})
+@Node(labels = "Subject")
 public class Subject extends NodeIdentity {
   private String name;
 

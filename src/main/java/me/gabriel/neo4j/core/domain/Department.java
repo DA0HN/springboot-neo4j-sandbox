@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import me.gabriel.neo4j.application.api.request.DepartmentCreateRequest;
 import me.gabriel.neo4j.infra.db.repositories.NodeIdentity;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -14,6 +15,7 @@ import org.springframework.data.neo4j.core.schema.Node;
  */
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Node

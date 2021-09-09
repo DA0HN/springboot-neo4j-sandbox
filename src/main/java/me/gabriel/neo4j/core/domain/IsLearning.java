@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import me.gabriel.neo4j.infra.db.repositories.NodeIdentity;
 import org.springframework.data.neo4j.core.schema.RelationshipProperties;
 import org.springframework.data.neo4j.core.schema.TargetNode;
@@ -16,6 +17,7 @@ import org.springframework.data.neo4j.core.schema.TargetNode;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @RelationshipProperties
 public class IsLearning extends NodeIdentity {
   private Long marks;

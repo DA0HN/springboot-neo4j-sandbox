@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import me.gabriel.neo4j.application.api.request.StudentCreateRequest;
 import me.gabriel.neo4j.infra.db.repositories.NodeIdentity;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -22,6 +23,7 @@ import static org.springframework.data.neo4j.core.schema.Relationship.Direction.
 @Setter
 @Node
 @NoArgsConstructor
+@ToString
 @AllArgsConstructor
 public class Student extends NodeIdentity {
 
