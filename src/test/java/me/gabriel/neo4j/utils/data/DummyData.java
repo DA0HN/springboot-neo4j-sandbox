@@ -1,4 +1,4 @@
-package me.gabriel.neo4j.utils;
+package me.gabriel.neo4j.utils.data;
 
 import com.github.javafaker.Faker;
 

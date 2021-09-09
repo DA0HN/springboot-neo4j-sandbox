@@ -1,4 +1,4 @@
-package me.gabriel.neo4j.utils;
+package me.gabriel.neo4j.utils.asserts;
 
 import me.gabriel.neo4j.application.api.request.DepartmentCreateRequest;
 import me.gabriel.neo4j.application.api.request.SubjectCreateRequest;
