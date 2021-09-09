@@ -41,4 +41,10 @@ public class IsLearningFactory {
       .collect(Collectors.toCollection(ArrayList::new));
   }
 
+  public static List<IsLearning> isLearningListRandom() {
+    return IntStream.range(0, size())
+      .mapToObj(i -> isLearning())
+      .collect(Collectors.toCollection(ArrayList::new));
+  }
+
 }

@@ -5,10 +5,15 @@ import me.gabriel.neo4j.application.api.request.StudentCreateRequest;
 import me.gabriel.neo4j.application.api.request.SubjectCreateRequest;
 import me.gabriel.neo4j.core.domain.Student;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import static java.util.Arrays.asList;
-import static me.gabriel.neo4j.utils.data.DepartmentFactory.departmentWithId;
+import static me.gabriel.neo4j.utils.data.DepartmentFactory.department;
 import static me.gabriel.neo4j.utils.data.DummyData.*;
-import static me.gabriel.neo4j.utils.data.IsLearningFactory.isLearningList;
+import static me.gabriel.neo4j.utils.data.IsLearningFactory.isLearningListRandom;
 
 @SuppressWarnings("LawOfDemeter")
 public class StudentFactory {
@@ -27,13 +32,19 @@ public class StudentFactory {
     );
   }
 
+  public static List<Student> studentList(int size) {
+    return IntStream.range(0, size)
+      .mapToObj(i -> student())
+      .collect(Collectors.toCollection(ArrayList::new));
+  }
+
   public static Student student() {
     return new Student(
       name(),
       country(),
       year(),
-      departmentWithId(),
-      isLearningList()
+      department(),
+      isLearningListRandom()
     );
   }
 
