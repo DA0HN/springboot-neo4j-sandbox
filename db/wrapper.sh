@@ -30,4 +30,7 @@ fi
 TOTAL_CHANGES=$(cypher-shell --format plain "MATCH (n) RETURN count(n) AS count")
 log_info "Wrapper: Changes $(echo ${TOTAL_CHANGES} | sed -e 's/[\r\n]//g')"
 
+log_info "Creating a test database"
+cypher-shell --format plain "CREATE DATABASE test"
+
 fg %1
