@@ -1,4 +1,4 @@
-FROM neo4j:latest
+FROM neo4j:enterprise
 
 COPY wrapper.sh wrapper.sh
 

@@ -47,7 +47,3 @@ CREATE (student3)-[:IS_LEARNING {marks: 25}]->(subject5)
 CREATE (student3)-[:IS_LEARNING {marks: 27}]->(subject6)
 CREATE (student4)-[:IS_LEARNING {marks: 21}]->(subject1)
 CREATE (student4)-[:IS_LEARNING {marks: 67}]->(subject2)
-
-
-
-
