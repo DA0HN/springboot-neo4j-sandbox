@@ -20,6 +20,7 @@ import static me.gabriel.neo4j.utils.data.DummyData.name;
 import static me.gabriel.neo4j.utils.data.DummyData.subjectName;
 import static me.gabriel.neo4j.utils.data.DummyData.year;
 import static me.gabriel.neo4j.utils.data.IsLearningFactory.isLearningListRandom;
+import static me.gabriel.neo4j.utils.data.IsLearningFactory.isLearningListRandomWithId;
 
 public class StudentFactory {
 
@@ -55,6 +56,7 @@ public class StudentFactory {
 
   public static Student studentWithId() {
     var student = student();
+    student.setIsLearning(isLearningListRandomWithId());
     student.setId(id());
     return student;
   }
