@@ -26,6 +26,7 @@ import static me.gabriel.neo4j.utils.asserts.StudentResponseAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -68,6 +69,13 @@ class StudentServiceTest {
     var response = this.studentService.create(request);
 
     this.assertStudentResponse(request, response);
+  }
+
+  private void assertStudentResponse(StudentCreateRequest request, StudentResponse response) {
+    assertThat(response)
+      .hasId()
+      .subjectsRelationshipWereCreated()
+      .hasDepartment();
   }
 
   @Test
@@ -135,11 +143,17 @@ class StudentServiceTest {
     assertEquals("Partial name must be not null", exception.getMessage());
   }
 
-  private void assertStudentResponse(StudentCreateRequest request, StudentResponse response) {
-    assertThat(response)
-      .hasId()
-      .subjectsRelationshipWereCreated()
-      .hasDepartment();
+  @Test
+  void whenDepartmentAlreadyExistShouldFindInDatabaseAndCreateRelationship() {
+    when(this.studentRepository.create(isA(STUDENT_REPOSITORY_ARG))).thenReturn(StudentFactory.studentWithId());
+    when(this.subjectRepository.create(isA(SUBJECT_REPOSITORY_ARG))).thenReturn(SubjectFactory.subjectWithId());
+    when(this.departmentRepository.findByName(isA(String.class))).thenReturn(Optional.of(DepartmentFactory.departmentWithId()));
+
+    final var response = this.studentService.create(StudentFactory.createStudentRequest());
+
+    verify(this.departmentRepository, times(1)).findByName(anyString());
+    verify(this.departmentRepository, never()).create(isA(DEPARTMENT_REPOSITORY_ARG));
   }
+
 
 }
