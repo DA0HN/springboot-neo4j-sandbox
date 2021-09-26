@@ -14,19 +14,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataNeo4jTest
 class StudentNeo4jRepositoryTest {
 
+  private static final int SIZE_STUDENT_LIST = 10;
   @Autowired
   private StudentNeo4jRepository studentNeo4jRepository;
 
   @BeforeEach
   void setUp() {
+    final var studentsToSave = StudentFactory.studentList(SIZE_STUDENT_LIST);
+    this.studentNeo4jRepository.saveAll(studentsToSave);
   }
 
   @Test
   void whenDatabaseHasStudentsStoredShouldReturnAllStudents() {
-
-    var SIZE_STUDENT_LIST = 10;
-    this.studentNeo4jRepository.saveAll(StudentFactory.studentList(SIZE_STUDENT_LIST));
-
     List<Student> students = this.studentNeo4jRepository.findAll();
 
     assertThat(students)
