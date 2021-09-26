@@ -7,7 +7,7 @@ import java.util.Locale;
 public class DummyData {
 
   public static final int MAX_MARK_VALUE = 100;
-  public static final int MIN_SIZE_VALUE = 0;
+  public static final int MIN_SIZE_VALUE = 1;
   public static final int MIN_MARK_VALUE = 0;
   public static final int MAX_SIZE_VALUE = 8;
   public static final int NUMBER_OF_DIGITS = 4;
