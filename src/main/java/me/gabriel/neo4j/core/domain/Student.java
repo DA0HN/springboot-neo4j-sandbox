@@ -11,6 +11,7 @@ import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.springframework.data.neo4j.core.schema.Relationship.Direction.OUTGOING;
@@ -61,5 +62,10 @@ public class Student extends NodeIdentity {
     student.setCountry(request.country());
     student.setBirthYear(request.birthYear());
     return student;
+  }
+
+  public void setRelationship(Department department, List<IsLearning> isLearning) {
+    this.department = department;
+    this.isLearning = Collections.unmodifiableList(isLearning);
   }
 }

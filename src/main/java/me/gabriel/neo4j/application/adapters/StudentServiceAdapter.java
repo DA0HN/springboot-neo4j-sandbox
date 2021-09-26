@@ -31,11 +31,10 @@ public class StudentServiceAdapter implements StudentService {
   private final SubjectRepository subjectRepository;
 
   @Override public StudentResponse create(StudentCreateRequest request) {
-    var department = this.createDepartment(request);
 
-    var isLearningRelations = this.createSubjects(request);
+    var student = Student.from(request);
 
-    Student student = this.setupRelationship(request, department, isLearningRelations);
+    this.createRelationships(request, student);
 
     student = this.studentRepository.create(student);
 
@@ -66,23 +65,29 @@ public class StudentServiceAdapter implements StudentService {
       .collect(Collectors.toList());
   }
 
-  private Student setupRelationship(StudentCreateRequest request, Department department, List<IsLearning> isLearningRelations) {
-    var student = Student.from(request);
+  private void createRelationships(StudentCreateRequest request, Student student) {
+    student.setRelationship(
+      this.extractDepartmentRelationship(request, student),
+      this.extractSubjectRelationship(request, student)
+    );
+  }
 
-    student.setIsLearning(isLearningRelations);
-    student.setDepartment(department);
+  private List<IsLearning> extractSubjectRelationship(StudentCreateRequest request, Student student) {
+    return this.createSubjects(request);
+  }
 
-    return student;
+  private Department extractDepartmentRelationship(StudentCreateRequest request, Student student) {
+    String departmentName = request.departmentName();
+    return this.createDepartment(request);
   }
 
   private List<IsLearning> createSubjects(StudentCreateRequest request) {
     return request.subjects()
       .stream()
       .map(data -> {
-        var subject = new Subject(data.name());
-
-        this.subjectRepository.create(subject);
-
+        var subject = this.subjectRepository.create(new Subject(
+          data.name()
+        ));
         return new IsLearning(data.marks(), subject);
       }).collect(Collectors.toList());
   }
