@@ -41,6 +41,46 @@ public class StudentServiceAdapter implements StudentService {
     return StudentResponse.from(student);
   }
 
+  private void createRelationships(StudentCreateRequest request, Student student) {
+    student.setRelationship(
+      this.extractDepartmentRelationship(request, student),
+      this.extractSubjectRelationship(request, student)
+    );
+  }
+
+  private Department extractDepartmentRelationship(StudentCreateRequest request, Student student) {
+    String departmentName = request.departmentName();
+
+    final var maybeDepartment = this.departmentRepository.findByName(departmentName);
+
+    if(maybeDepartment.isEmpty()) {
+      return this.createDepartment(request);
+    }
+
+    return maybeDepartment.get();
+  }
+
+  private Department createDepartment(StudentCreateRequest request) {
+    var department = Department.from(request.department());
+    this.departmentRepository.create(department);
+    return department;
+  }
+
+  private List<IsLearning> extractSubjectRelationship(StudentCreateRequest request, Student student) {
+    return this.createSubjects(request);
+  }
+
+  private List<IsLearning> createSubjects(StudentCreateRequest request) {
+    return request.subjects()
+      .stream()
+      .map(data -> {
+        var subject = this.subjectRepository.create(new Subject(
+          data.name()
+        ));
+        return new IsLearning(data.marks(), subject);
+      }).collect(Collectors.toList());
+  }
+
   @Override public StudentResponse findById(Long studentId) {
 
     if(Objects.isNull(studentId)) {
@@ -63,38 +103,5 @@ public class StudentServiceAdapter implements StudentService {
       .stream()
       .map(StudentResponse::from)
       .collect(Collectors.toList());
-  }
-
-  private void createRelationships(StudentCreateRequest request, Student student) {
-    student.setRelationship(
-      this.extractDepartmentRelationship(request, student),
-      this.extractSubjectRelationship(request, student)
-    );
-  }
-
-  private List<IsLearning> extractSubjectRelationship(StudentCreateRequest request, Student student) {
-    return this.createSubjects(request);
-  }
-
-  private Department extractDepartmentRelationship(StudentCreateRequest request, Student student) {
-    String departmentName = request.departmentName();
-    return this.createDepartment(request);
-  }
-
-  private List<IsLearning> createSubjects(StudentCreateRequest request) {
-    return request.subjects()
-      .stream()
-      .map(data -> {
-        var subject = this.subjectRepository.create(new Subject(
-          data.name()
-        ));
-        return new IsLearning(data.marks(), subject);
-      }).collect(Collectors.toList());
-  }
-
-  private Department createDepartment(StudentCreateRequest request) {
-    var department = Department.from(request.department());
-    this.departmentRepository.create(department);
-    return department;
   }
 }

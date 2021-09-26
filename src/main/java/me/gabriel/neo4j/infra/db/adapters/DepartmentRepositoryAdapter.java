@@ -6,6 +6,8 @@ import me.gabriel.neo4j.core.ports.DepartmentRepository;
 import me.gabriel.neo4j.infra.db.repositories.DepartmentNeo4jRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 /**
  * @author daohn
  * @since 19/08/2021
@@ -18,5 +20,9 @@ public class DepartmentRepositoryAdapter implements DepartmentRepository {
 
   @Override public Department create(Department department) {
     return this.repository.save(department);
+  }
+
+  @Override public Optional<Department> findByName(String name) {
+    return this.repository.findByName(name);
   }
 }
