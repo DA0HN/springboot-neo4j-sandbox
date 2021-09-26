@@ -13,4 +13,9 @@ public record StudentCreateRequest(
   List<SubjectCreateRequest> subjects,
   DepartmentCreateRequest department
 ) {
+
+  public String departmentName() {
+    return this.department.name();
+  }
+
 }
