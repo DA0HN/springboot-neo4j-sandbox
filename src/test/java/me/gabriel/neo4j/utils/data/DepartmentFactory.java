@@ -7,14 +7,14 @@ import static me.gabriel.neo4j.utils.data.DummyData.id;
 
 public class DepartmentFactory {
 
-  public static Department department() {
-    return new Department(departmentName());
-  }
-
   public static Department departmentWithId() {
     Department department = department();
     department.setId(id());
     return department;
+  }
+
+  public static Department department() {
+    return new Department(departmentName());
   }
 
 }
