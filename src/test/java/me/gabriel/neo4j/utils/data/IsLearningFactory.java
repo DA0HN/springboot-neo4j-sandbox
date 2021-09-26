@@ -36,13 +36,13 @@ public class IsLearningFactory {
   }
 
   public static List<IsLearning> isLearningListRandomWithId() {
-    return IntStream.range(0, size())
+    return IntStream.range(1, size())
       .mapToObj(i -> isLearningWithId())
       .collect(Collectors.toCollection(ArrayList::new));
   }
 
   public static List<IsLearning> isLearningListRandom() {
-    return IntStream.range(0, size())
+    return IntStream.range(1, size())
       .mapToObj(i -> isLearning())
       .collect(Collectors.toCollection(ArrayList::new));
   }

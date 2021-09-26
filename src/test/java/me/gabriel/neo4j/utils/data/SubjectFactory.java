@@ -24,13 +24,13 @@ public class SubjectFactory {
   }
 
   public static List<Subject> subjectListRandom() {
-    return IntStream.range(0, size())
+    return IntStream.range(1, size())
       .mapToObj(i -> subject())
       .collect(Collectors.toCollection(ArrayList::new));
   }
 
   public static List<Subject> subjectListRandomWithId() {
-    return IntStream.range(0, size())
+    return IntStream.range(1, size())
       .mapToObj(i -> subjectWithId())
       .collect(Collectors.toCollection(ArrayList::new));
   }

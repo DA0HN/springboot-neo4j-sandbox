@@ -12,10 +12,15 @@ import java.util.stream.IntStream;
 
 import static java.util.Arrays.asList;
 import static me.gabriel.neo4j.utils.data.DepartmentFactory.department;
-import static me.gabriel.neo4j.utils.data.DummyData.*;
+import static me.gabriel.neo4j.utils.data.DummyData.country;
+import static me.gabriel.neo4j.utils.data.DummyData.departmentName;
+import static me.gabriel.neo4j.utils.data.DummyData.id;
+import static me.gabriel.neo4j.utils.data.DummyData.marksPercent;
+import static me.gabriel.neo4j.utils.data.DummyData.name;
+import static me.gabriel.neo4j.utils.data.DummyData.subjectName;
+import static me.gabriel.neo4j.utils.data.DummyData.year;
 import static me.gabriel.neo4j.utils.data.IsLearningFactory.isLearningListRandom;
 
-@SuppressWarnings("LawOfDemeter")
 public class StudentFactory {
 
   public static StudentCreateRequest createStudentRequest() {
@@ -33,7 +38,7 @@ public class StudentFactory {
   }
 
   public static List<Student> studentList(int size) {
-    return IntStream.range(0, size)
+    return IntStream.range(1, size)
       .mapToObj(i -> student())
       .collect(Collectors.toCollection(ArrayList::new));
   }
