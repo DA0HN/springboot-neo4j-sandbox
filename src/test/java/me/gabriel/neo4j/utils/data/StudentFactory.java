@@ -38,7 +38,7 @@ public class StudentFactory {
   }
 
   public static List<Student> studentList(int size) {
-    return IntStream.range(1, size)
+    return IntStream.range(0, size)
       .mapToObj(i -> student())
       .collect(Collectors.toCollection(ArrayList::new));
   }

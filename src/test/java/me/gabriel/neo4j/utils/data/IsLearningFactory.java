@@ -11,6 +11,7 @@ import java.util.stream.IntStream;
 import static me.gabriel.neo4j.utils.data.DummyData.id;
 import static me.gabriel.neo4j.utils.data.DummyData.marksPercent;
 import static me.gabriel.neo4j.utils.data.DummyData.size;
+import static me.gabriel.neo4j.utils.data.SubjectFactory.subject;
 import static me.gabriel.neo4j.utils.data.SubjectFactory.subjectList;
 import static me.gabriel.neo4j.utils.data.SubjectFactory.subjectWithId;
 
@@ -28,7 +29,7 @@ public class IsLearningFactory {
   }
 
   public static IsLearning isLearning() {
-    return new IsLearning(marksPercent(), subjectWithId());
+    return new IsLearning(marksPercent(), subject());
   }
 
   public static IsLearning isLearningWithId() {
@@ -36,13 +37,13 @@ public class IsLearningFactory {
   }
 
   public static List<IsLearning> isLearningListRandomWithId() {
-    return IntStream.range(1, size())
+    return IntStream.range(0, size())
       .mapToObj(i -> isLearningWithId())
       .collect(Collectors.toCollection(ArrayList::new));
   }
 
   public static List<IsLearning> isLearningListRandom() {
-    return IntStream.range(1, size())
+    return IntStream.range(0, size())
       .mapToObj(i -> isLearning())
       .collect(Collectors.toCollection(ArrayList::new));
   }
