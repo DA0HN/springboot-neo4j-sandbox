@@ -11,7 +11,6 @@ import me.gabriel.neo4j.core.ports.StudentRepository;
 import me.gabriel.neo4j.core.ports.SubjectRepository;
 import me.gabriel.neo4j.utils.data.DepartmentFactory;
 import me.gabriel.neo4j.utils.data.StudentFactory;
-import me.gabriel.neo4j.utils.data.SubjectFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +22,7 @@ import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static me.gabriel.neo4j.utils.asserts.StudentResponseAssert.assertThat;
+import static me.gabriel.neo4j.utils.data.SubjectFactory.subjectWithDummyName;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -62,7 +62,8 @@ class StudentServiceTest {
   void whenValidRequestShouldCreateStudentAndRelationship() {
     when(this.departmentRepository.create(isA(DEPARTMENT_REPOSITORY_ARG))).thenReturn(DepartmentFactory.departmentWithId());
     when(this.studentRepository.create(isA(STUDENT_REPOSITORY_ARG))).thenReturn(StudentFactory.studentWithId());
-    when(this.subjectRepository.create(isA(SUBJECT_REPOSITORY_ARG))).thenReturn(SubjectFactory.subjectWithId());
+    when(this.subjectRepository.findByName(isA(String.class))).thenReturn(Optional.empty());
+    when(this.subjectRepository.create(isA(SUBJECT_REPOSITORY_ARG))).thenReturn(subjectWithDummyName());
 
     var request = StudentFactory.createStudentRequest();
 
@@ -146,14 +147,30 @@ class StudentServiceTest {
   @Test
   void whenDepartmentAlreadyExistShouldFindInDatabaseAndCreateRelationship() {
     when(this.studentRepository.create(isA(STUDENT_REPOSITORY_ARG))).thenReturn(StudentFactory.studentWithId());
-    when(this.subjectRepository.create(isA(SUBJECT_REPOSITORY_ARG))).thenReturn(SubjectFactory.subjectWithId());
+    when(this.subjectRepository.create(isA(SUBJECT_REPOSITORY_ARG))).thenReturn(subjectWithDummyName());
     when(this.departmentRepository.findByName(isA(String.class))).thenReturn(Optional.of(DepartmentFactory.departmentWithId()));
 
-    final var response = this.studentService.create(StudentFactory.createStudentRequest());
+    final var request = StudentFactory.createStudentRequest();
+
+    final var response = this.studentService.create(request);
 
     verify(this.departmentRepository, times(1)).findByName(anyString());
     verify(this.departmentRepository, never()).create(isA(DEPARTMENT_REPOSITORY_ARG));
   }
 
+  @Test
+  void whenSubjectAlreadyExistsShouldFindIDatabaseAndCreateRelationship() {
+    when(this.studentRepository.create(isA(STUDENT_REPOSITORY_ARG))).thenReturn(StudentFactory.studentWithId());
+    when(this.departmentRepository.create(isA(DEPARTMENT_REPOSITORY_ARG))).thenReturn(DepartmentFactory.departmentWithId());
+    when(this.subjectRepository.findByName(isA(String.class))).thenReturn(Optional.of(subjectWithDummyName()));
+
+    final var request = StudentFactory.createStudentRequest();
+    final var SUBJECT_LIST_SIZE = request.subjects().size();
+
+    final var response = this.studentService.create(request);
+
+    verify(this.subjectRepository, times(SUBJECT_LIST_SIZE)).findByName(anyString());
+    verify(this.subjectRepository, never()).create(isA(SUBJECT_REPOSITORY_ARG));
+  }
 
 }

@@ -23,6 +23,13 @@ public class SubjectFactory {
     return subject;
   }
 
+  public static Subject subjectWithDummyName() {
+    Subject subject = subject();
+    subject.setName("subject 1");
+    subject.setId(id());
+    return subject;
+  }
+
   public static List<Subject> subjectListRandom() {
     return IntStream.range(0, size())
       .mapToObj(i -> subject())

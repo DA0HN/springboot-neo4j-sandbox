@@ -17,7 +17,6 @@ import static me.gabriel.neo4j.utils.data.DummyData.departmentName;
 import static me.gabriel.neo4j.utils.data.DummyData.id;
 import static me.gabriel.neo4j.utils.data.DummyData.marksPercent;
 import static me.gabriel.neo4j.utils.data.DummyData.name;
-import static me.gabriel.neo4j.utils.data.DummyData.subjectName;
 import static me.gabriel.neo4j.utils.data.DummyData.year;
 import static me.gabriel.neo4j.utils.data.IsLearningFactory.isLearningListRandom;
 import static me.gabriel.neo4j.utils.data.IsLearningFactory.isLearningListRandomWithId;
@@ -30,9 +29,9 @@ public class StudentFactory {
       year(),
       country(),
       asList(
-        new SubjectCreateRequest(subjectName(), marksPercent()),
-        new SubjectCreateRequest(subjectName(), marksPercent()),
-        new SubjectCreateRequest(subjectName(), marksPercent())
+        new SubjectCreateRequest("subject 1", marksPercent()),
+        new SubjectCreateRequest("subject 1", marksPercent()),
+        new SubjectCreateRequest("subject 1", marksPercent())
       ),
       new DepartmentCreateRequest(departmentName())
     );
