@@ -2,6 +2,7 @@ package me.gabriel.neo4j.application.adapters;
 
 import lombok.AllArgsConstructor;
 import me.gabriel.neo4j.application.api.request.StudentCreateRequest;
+import me.gabriel.neo4j.application.api.request.SubjectCreateRequest;
 import me.gabriel.neo4j.application.api.response.StudentResponse;
 import me.gabriel.neo4j.core.domain.Department;
 import me.gabriel.neo4j.core.domain.IsLearning;
@@ -49,9 +50,9 @@ public class StudentServiceAdapter implements StudentService {
   }
 
   private Department extractDepartmentRelationship(StudentCreateRequest request, Student student) {
-    String departmentName = request.departmentName();
-
-    final var maybeDepartment = this.departmentRepository.findByName(departmentName);
+    final var maybeDepartment = this.departmentRepository.findByName(
+      request.departmentName()
+    );
 
     if(maybeDepartment.isEmpty()) {
       return this.createDepartment(request);
@@ -60,23 +61,40 @@ public class StudentServiceAdapter implements StudentService {
     return maybeDepartment.get();
   }
 
+  private List<IsLearning> extractSubjectRelationship(StudentCreateRequest request, Student student) {
+    final var subjects = request.subjects().stream()
+      .map(this::findOrCreateSubject)
+      .collect(Collectors.toList());
+
+    return this.createIsLearningRelationshipWithSubject(subjects, request.subjects());
+  }
+
   private Department createDepartment(StudentCreateRequest request) {
     var department = Department.from(request.department());
     this.departmentRepository.create(department);
     return department;
   }
 
-  private List<IsLearning> extractSubjectRelationship(StudentCreateRequest request, Student student) {
-    return this.createSubjects(request);
+  private Subject findOrCreateSubject(SubjectCreateRequest subject) {
+    final var maybeSubject = this.subjectRepository.findByName(subject.name());
+    if(maybeSubject.isEmpty()) {
+      return this.subjectRepository.create(new Subject(subject.name()));
+    }
+    return maybeSubject.get();
   }
 
-  private List<IsLearning> createSubjects(StudentCreateRequest request) {
-    return request.subjects()
+  private List<IsLearning> createIsLearningRelationshipWithSubject(
+    List<Subject> subjects,
+    List<SubjectCreateRequest> subjectRequest
+  ) {
+    return subjectRequest
       .stream()
       .map(data -> {
-        var subject = this.subjectRepository.create(new Subject(
-          data.name()
-        ));
+        final var subject = subjects.stream()
+          .filter(sub -> sub.getName().equalsIgnoreCase(data.name()))
+          .findFirst()
+          .orElseThrow(() -> new IllegalStateException("Subject should be found."));
+
         return new IsLearning(data.marks(), subject);
       }).collect(Collectors.toList());
   }

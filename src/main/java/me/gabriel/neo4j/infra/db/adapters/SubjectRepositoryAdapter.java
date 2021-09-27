@@ -7,6 +7,7 @@ import me.gabriel.neo4j.infra.db.repositories.SubjectNeo4jRespository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author daohn
@@ -24,5 +25,9 @@ public class SubjectRepositoryAdapter implements SubjectRepository {
 
   @Override public List<Subject> createAll(List<Subject> subjects) {
     return this.repository.saveAll(subjects);
+  }
+
+  @Override public Optional<Subject> findByName(String name) {
+    return this.repository.findByName(name);
   }
 }
