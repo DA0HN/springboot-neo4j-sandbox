@@ -12,6 +12,7 @@ import me.gabriel.neo4j.core.ports.SubjectRepository;
 import me.gabriel.neo4j.utils.data.DepartmentFactory;
 import me.gabriel.neo4j.utils.data.StudentFactory;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -59,6 +60,7 @@ class StudentServiceTest {
   }
 
   @Test
+  @DisplayName("Quando os dados do estudante for válido deveria criar o `Student` e seus relacionamentos")
   void whenValidRequestShouldCreateStudentAndRelationship() {
     when(this.departmentRepository.create(isA(DEPARTMENT_REPOSITORY_ARG))).thenReturn(DepartmentFactory.departmentWithId());
     when(this.studentRepository.create(isA(STUDENT_REPOSITORY_ARG))).thenReturn(StudentFactory.studentWithId());
@@ -80,6 +82,7 @@ class StudentServiceTest {
   }
 
   @Test
+  @DisplayName("Quando o identificador do `Student` for válido deveria retornar o `Student` com este identificador")
   void whenValidIdShouldFindStudentById() {
 
     when(this.studentRepository.findById(isA(Long.class))).thenReturn(Optional.of(StudentFactory.studentWithId()));
@@ -91,6 +94,7 @@ class StudentServiceTest {
   }
 
   @Test
+  @DisplayName("Quando o `Student` não for encontrado deveria lançar a exceção `StudentNotFoundException`")
   void whenNotFoundStudentShouldThrowException() {
     when(this.studentRepository.findById(isA(Long.class))).thenReturn(Optional.empty());
 
@@ -103,6 +107,7 @@ class StudentServiceTest {
   }
 
   @Test
+  @DisplayName("Quando o identificador do `Student` for nulo deveria lançar a exceção `IllegalArgumentException`")
   void whenFindWithIdNullShouldThrowException() {
 
     var exception = assertThrows(
@@ -116,6 +121,7 @@ class StudentServiceTest {
   }
 
   @Test
+  @DisplayName("Quando o nome parcial é valido deveria retornar uma lista de estudantes")
   void whenPartialNameIsValidShouldReturnStudents() {
     when(this.studentRepository.findAllByPartialName(isA(String.class))).thenReturn(asList(
       StudentFactory.studentWithId(),
@@ -135,6 +141,7 @@ class StudentServiceTest {
   }
 
   @Test
+  @DisplayName("Quando o nome parcial for nulo deveria lançar a exceção `IllegalArgumentException`")
   void whenPartialNameIsNullShouldThrowIllegalArgumentException() {
     var exception = assertThrows(
       IllegalArgumentException.class,
@@ -145,6 +152,7 @@ class StudentServiceTest {
   }
 
   @Test
+  @DisplayName("Quando o `Department` já existir deveria busca-lo no banco de dados e criar o relacionamento `BELONGS_TO`")
   void whenDepartmentAlreadyExistShouldFindInDatabaseAndCreateRelationship() {
     when(this.studentRepository.create(isA(STUDENT_REPOSITORY_ARG))).thenReturn(StudentFactory.studentWithId());
     when(this.subjectRepository.create(isA(SUBJECT_REPOSITORY_ARG))).thenReturn(subjectWithDummyName());
@@ -159,7 +167,8 @@ class StudentServiceTest {
   }
 
   @Test
-  void whenSubjectAlreadyExistsShouldFindIDatabaseAndCreateRelationship() {
+  @DisplayName("Quando o `Subject` já existir deveria busca-lo no banco de dados e criar o relacionamento `IS_LEARNING`")
+  void whenSubjectAlreadyExistsShouldFindInDatabaseAndCreateRelationship() {
     when(this.studentRepository.create(isA(STUDENT_REPOSITORY_ARG))).thenReturn(StudentFactory.studentWithId());
     when(this.departmentRepository.create(isA(DEPARTMENT_REPOSITORY_ARG))).thenReturn(DepartmentFactory.departmentWithId());
     when(this.subjectRepository.findByName(isA(String.class))).thenReturn(Optional.of(subjectWithDummyName()));
