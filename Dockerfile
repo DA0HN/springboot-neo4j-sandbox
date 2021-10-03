@@ -1,4 +1,4 @@
-FROM maven:3.6-openjdk-16 AS builder
+FROM maven:3.8.2-openjdk-17 AS builder
 WORKDIR /workdir/server
 COPY pom.xml /workdir/server/pom.xml
 RUN mvn dependency:go-offline
@@ -9,7 +9,7 @@ RUN mkdir  -p target/dependency
 WORKDIR /workdir/server/target/dependency
 RUN jar -xf ../*.jar
 
-FROM openjdk:16-alpine
+FROM openjdk:17-alpine
 
 #EXPOSE 0
 VOLUME /tmp
