@@ -64,7 +64,7 @@ public class Student extends NodeIdentity {
     return student;
   }
 
-  public void setRelationship(Department department, List<IsLearning> isLearning) {
+  public void relationships(Department department, List<IsLearning> isLearning) {
     this.department = department;
     this.isLearning = Collections.unmodifiableList(isLearning);
   }

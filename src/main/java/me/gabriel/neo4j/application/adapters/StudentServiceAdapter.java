@@ -43,9 +43,9 @@ public class StudentServiceAdapter implements StudentService {
   }
 
   private void createRelationships(StudentCreateRequest request, Student student) {
-    student.setRelationship(
-      this.extractDepartmentRelationship(request, student),
-      this.extractSubjectRelationship(request, student)
+    student.relationships(
+      this.extractDepartmentRelationship(request),
+      this.extractSubjectRelationship(request)
     );
   }
 
