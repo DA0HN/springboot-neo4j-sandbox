@@ -59,4 +59,18 @@ public class StudentFactory {
     student.setId(id());
     return student;
   }
+
+  public static StudentCreateRequest studentRequestWithoutDepartment() {
+    return new StudentCreateRequest(
+      name(),
+      year(),
+      country(),
+      asList(
+        new SubjectCreateRequest("subject 1", marksPercent()),
+        new SubjectCreateRequest("subject 1", marksPercent()),
+        new SubjectCreateRequest("subject 1", marksPercent())
+      ),
+      new DepartmentCreateRequest(null)
+    );
+  }
 }

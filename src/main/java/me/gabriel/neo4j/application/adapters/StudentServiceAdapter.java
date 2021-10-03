@@ -9,7 +9,6 @@ import me.gabriel.neo4j.core.domain.IsLearning;
 import me.gabriel.neo4j.core.domain.Student;
 import me.gabriel.neo4j.core.domain.StudentNotFoundException;
 import me.gabriel.neo4j.core.domain.Subject;
-import me.gabriel.neo4j.core.ports.DepartmentRepository;
 import me.gabriel.neo4j.core.ports.StudentRepository;
 import me.gabriel.neo4j.core.ports.StudentService;
 import me.gabriel.neo4j.core.ports.SubjectRepository;
@@ -29,8 +28,8 @@ import java.util.stream.Collectors;
 public class StudentServiceAdapter implements StudentService {
 
   private final StudentRepository studentRepository;
-  private final DepartmentRepository departmentRepository;
   private final SubjectRepository subjectRepository;
+  private final StudentRelationshipCreator<Department> belongsToRelationshipCreator;
 
   @Override public StudentResponse create(StudentCreateRequest request) {
     var student = Student.from(request);
@@ -44,27 +43,9 @@ public class StudentServiceAdapter implements StudentService {
 
   private void createRelationships(StudentCreateRequest request, Student student) {
     student.relationships(
-      this.extractDepartmentRelationship(request),
+      this.belongsToRelationshipCreator.create(request),
       this.extractSubjectRelationship(request)
     );
-  }
-
-  private Department extractDepartmentRelationship(StudentCreateRequest request) {
-    final var maybeDepartment = this.departmentRepository.findByName(
-      request.departmentName()
-    );
-
-    if(maybeDepartment.isEmpty()) {
-      return this.createDepartment(request);
-    }
-
-    return maybeDepartment.get();
-  }
-
-  private Department createDepartment(StudentCreateRequest request) {
-    var department = Department.from(request.department());
-    this.departmentRepository.create(department);
-    return department;
   }
 
   private List<IsLearning> extractSubjectRelationship(StudentCreateRequest request) {
@@ -75,10 +56,10 @@ public class StudentServiceAdapter implements StudentService {
     return this.createIsLearningRelationshipWithSubject(subjects, request.subjects());
   }
 
-  private Subject findOrCreateSubject(SubjectCreateRequest subject) {
-    final var maybeSubject = this.subjectRepository.findByName(subject.name());
+  private Subject findOrCreateSubject(SubjectCreateRequest request) {
+    final var maybeSubject = this.subjectRepository.findByName(request.name());
     if(maybeSubject.isEmpty()) {
-      return this.subjectRepository.create(new Subject(subject.name()));
+      return this.subjectRepository.create(new Subject(request.name()));
     }
     return maybeSubject.get();
   }

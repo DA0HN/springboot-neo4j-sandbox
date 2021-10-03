@@ -54,6 +54,8 @@ class StudentServiceTest {
   private DepartmentRepository departmentRepository;
   @Mock
   private SubjectRepository subjectRepository;
+  @Mock
+  private StudentRelationshipCreator<Department> belongsToRelationshipCreator;
 
   @BeforeEach
   void setUp() {
@@ -62,7 +64,7 @@ class StudentServiceTest {
   @Test
   @DisplayName("Quando os dados do estudante for válido deveria criar o `Student` e seus relacionamentos")
   void whenValidRequestShouldCreateStudentAndRelationship() {
-    when(this.departmentRepository.create(isA(DEPARTMENT_REPOSITORY_ARG))).thenReturn(DepartmentFactory.departmentWithId());
+    when(this.belongsToRelationshipCreator.create(isA(StudentCreateRequest.class))).thenReturn(DepartmentFactory.departmentWithId());
     when(this.studentRepository.create(isA(STUDENT_REPOSITORY_ARG))).thenReturn(StudentFactory.studentWithId());
     when(this.subjectRepository.findByName(isA(String.class))).thenReturn(Optional.empty());
     when(this.subjectRepository.create(isA(SUBJECT_REPOSITORY_ARG))).thenReturn(subjectWithDummyName());
@@ -71,10 +73,10 @@ class StudentServiceTest {
 
     var response = this.studentService.create(request);
 
-    this.assertStudentResponse(request, response);
+    this.assertStudentResponse(response);
   }
 
-  private void assertStudentResponse(StudentCreateRequest request, StudentResponse response) {
+  private void assertStudentResponse(StudentResponse response) {
     assertThat(response)
       .hasId()
       .subjectsRelationshipWereCreated()
@@ -156,13 +158,13 @@ class StudentServiceTest {
   void whenDepartmentAlreadyExistShouldFindInDatabaseAndCreateRelationship() {
     when(this.studentRepository.create(isA(STUDENT_REPOSITORY_ARG))).thenReturn(StudentFactory.studentWithId());
     when(this.subjectRepository.create(isA(SUBJECT_REPOSITORY_ARG))).thenReturn(subjectWithDummyName());
-    when(this.departmentRepository.findByName(isA(String.class))).thenReturn(Optional.of(DepartmentFactory.departmentWithId()));
+    when(this.belongsToRelationshipCreator.create(isA(StudentCreateRequest.class))).thenReturn(DepartmentFactory.departmentWithId());
 
     final var request = StudentFactory.createStudentRequest();
 
     final var response = this.studentService.create(request);
 
-    verify(this.departmentRepository, times(1)).findByName(anyString());
+    verify(this.belongsToRelationshipCreator, times(1)).create(isA(StudentCreateRequest.class));
     verify(this.departmentRepository, never()).create(isA(DEPARTMENT_REPOSITORY_ARG));
   }
 
@@ -170,7 +172,7 @@ class StudentServiceTest {
   @DisplayName("Quando o `Subject` já existir deveria busca-lo no banco de dados e criar o relacionamento `IS_LEARNING`")
   void whenSubjectAlreadyExistsShouldFindInDatabaseAndCreateRelationship() {
     when(this.studentRepository.create(isA(STUDENT_REPOSITORY_ARG))).thenReturn(StudentFactory.studentWithId());
-    when(this.departmentRepository.create(isA(DEPARTMENT_REPOSITORY_ARG))).thenReturn(DepartmentFactory.departmentWithId());
+    when(this.belongsToRelationshipCreator.create(isA(StudentCreateRequest.class))).thenReturn(DepartmentFactory.departmentWithId());
     when(this.subjectRepository.findByName(isA(String.class))).thenReturn(Optional.of(subjectWithDummyName()));
 
     final var request = StudentFactory.createStudentRequest();

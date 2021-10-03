@@ -13,6 +13,13 @@ public class DepartmentFactory {
     return department;
   }
 
+  public static Department departmentWithId(String name) {
+    Department department = department();
+    department.setName(name);
+    department.setId(id());
+    return department;
+  }
+
   public static Department department() {
     return new Department(departmentName());
   }
