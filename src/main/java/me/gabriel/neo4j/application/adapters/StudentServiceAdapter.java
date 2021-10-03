@@ -15,6 +15,7 @@ import me.gabriel.neo4j.core.ports.StudentService;
 import me.gabriel.neo4j.core.ports.SubjectRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -32,7 +33,6 @@ public class StudentServiceAdapter implements StudentService {
   private final SubjectRepository subjectRepository;
 
   @Override public StudentResponse create(StudentCreateRequest request) {
-
     var student = Student.from(request);
 
     this.createRelationships(request, student);
@@ -49,7 +49,7 @@ public class StudentServiceAdapter implements StudentService {
     );
   }
 
-  private Department extractDepartmentRelationship(StudentCreateRequest request, Student student) {
+  private Department extractDepartmentRelationship(StudentCreateRequest request) {
     final var maybeDepartment = this.departmentRepository.findByName(
       request.departmentName()
     );
@@ -61,18 +61,18 @@ public class StudentServiceAdapter implements StudentService {
     return maybeDepartment.get();
   }
 
-  private List<IsLearning> extractSubjectRelationship(StudentCreateRequest request, Student student) {
+  private Department createDepartment(StudentCreateRequest request) {
+    var department = Department.from(request.department());
+    this.departmentRepository.create(department);
+    return department;
+  }
+
+  private List<IsLearning> extractSubjectRelationship(StudentCreateRequest request) {
     final var subjects = request.subjects().stream()
       .map(this::findOrCreateSubject)
       .collect(Collectors.toList());
 
     return this.createIsLearningRelationshipWithSubject(subjects, request.subjects());
-  }
-
-  private Department createDepartment(StudentCreateRequest request) {
-    var department = Department.from(request.department());
-    this.departmentRepository.create(department);
-    return department;
   }
 
   private Subject findOrCreateSubject(SubjectCreateRequest subject) {
@@ -84,8 +84,8 @@ public class StudentServiceAdapter implements StudentService {
   }
 
   private List<IsLearning> createIsLearningRelationshipWithSubject(
-    List<Subject> subjects,
-    List<SubjectCreateRequest> subjectRequest
+    Collection<Subject> subjects,
+    Collection<SubjectCreateRequest> subjectRequest
   ) {
     return subjectRequest
       .stream()
