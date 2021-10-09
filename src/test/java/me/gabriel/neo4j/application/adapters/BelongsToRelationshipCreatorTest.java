@@ -3,7 +3,6 @@ package me.gabriel.neo4j.application.adapters;
 import me.gabriel.neo4j.core.domain.Department;
 import me.gabriel.neo4j.core.ports.DepartmentRepository;
 import me.gabriel.neo4j.utils.data.DepartmentFactory;
-import me.gabriel.neo4j.utils.data.StudentFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,7 +40,7 @@ class BelongsToRelationshipCreatorTest {
     var request = createStudentRequest();
     when(this.departmentRepository.findByName(anyString())).thenReturn(of(DepartmentFactory.departmentWithId(request.departmentName())));
 
-    final var department = this.belongsToRelationshipCreator.create(request);
+    final var department = this.belongsToRelationshipCreator.create("name");
 
     verify(this.departmentRepository, times(1)).findByName(anyString());
     verify(this.departmentRepository, never()).create(isA(DEPARTMENT_ARGUMENT));
@@ -61,7 +60,7 @@ class BelongsToRelationshipCreatorTest {
     when(this.departmentRepository.findByName(anyString())).thenReturn(empty());
     when(this.departmentRepository.create(isA(DEPARTMENT_ARGUMENT))).thenReturn(DepartmentFactory.departmentWithId());
 
-    final var department = this.belongsToRelationshipCreator.create(request);
+    final var department = this.belongsToRelationshipCreator.create("name");
 
     verify(this.departmentRepository, times(1)).findByName(anyString());
     verify(this.departmentRepository, times(1)).create(isA(DEPARTMENT_ARGUMENT));
@@ -70,7 +69,7 @@ class BelongsToRelationshipCreatorTest {
   @Test
   @DisplayName("Quando o nome do `Department` não for válido deveria lançar a exceção `IllegalArgumentException`")
   void shouldThrowIllegalArgumentExceptionIfInvalidName() {
-    assertThatThrownBy(() -> this.belongsToRelationshipCreator.create(StudentFactory.studentRequestWithoutDepartment()))
+    assertThatThrownBy(() -> this.belongsToRelationshipCreator.create(null))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessageContaining("Department name should be not null");
     verifyNoInteractions(this.departmentRepository);

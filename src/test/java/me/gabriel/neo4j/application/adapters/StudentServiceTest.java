@@ -1,15 +1,16 @@
 package me.gabriel.neo4j.application.adapters;
 
-import me.gabriel.neo4j.application.api.request.StudentCreateRequest;
+import me.gabriel.neo4j.application.api.request.SubjectCreateRequest;
 import me.gabriel.neo4j.application.api.response.StudentResponse;
 import me.gabriel.neo4j.core.domain.Department;
+import me.gabriel.neo4j.core.domain.IsLearning;
 import me.gabriel.neo4j.core.domain.Student;
 import me.gabriel.neo4j.core.domain.StudentNotFoundException;
 import me.gabriel.neo4j.core.domain.Subject;
-import me.gabriel.neo4j.core.ports.DepartmentRepository;
 import me.gabriel.neo4j.core.ports.StudentRepository;
 import me.gabriel.neo4j.core.ports.SubjectRepository;
 import me.gabriel.neo4j.utils.data.DepartmentFactory;
+import me.gabriel.neo4j.utils.data.IsLearningFactory;
 import me.gabriel.neo4j.utils.data.StudentFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,16 +19,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
+import java.util.List;
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static me.gabriel.neo4j.utils.asserts.StudentResponseAssert.assertThat;
-import static me.gabriel.neo4j.utils.data.SubjectFactory.subjectWithDummyName;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -51,11 +54,11 @@ class StudentServiceTest {
   @Mock
   private StudentRepository studentRepository;
   @Mock
-  private DepartmentRepository departmentRepository;
-  @Mock
   private SubjectRepository subjectRepository;
   @Mock
-  private StudentRelationshipCreator<Department> belongsToRelationshipCreator;
+  private StudentRelationshipCreator<Department, String> belongsToRelationshipCreator;
+  @Mock
+  private StudentRelationshipCreator<List<IsLearning>, List<SubjectCreateRequest>> isLearningRelationshipCreator;
 
   @BeforeEach
   void setUp() {
@@ -63,11 +66,11 @@ class StudentServiceTest {
 
   @Test
   @DisplayName("Quando os dados do estudante for válido deveria criar o `Student` e seus relacionamentos")
+  @MockitoSettings(strictness = Strictness.LENIENT)
   void whenValidRequestShouldCreateStudentAndRelationship() {
-    when(this.belongsToRelationshipCreator.create(isA(StudentCreateRequest.class))).thenReturn(DepartmentFactory.departmentWithId());
     when(this.studentRepository.create(isA(STUDENT_REPOSITORY_ARG))).thenReturn(StudentFactory.studentWithId());
-    when(this.subjectRepository.findByName(isA(String.class))).thenReturn(Optional.empty());
-    when(this.subjectRepository.create(isA(SUBJECT_REPOSITORY_ARG))).thenReturn(subjectWithDummyName());
+    when(this.belongsToRelationshipCreator.create(isA(String.class))).thenReturn(DepartmentFactory.departmentWithId());
+    when(this.isLearningRelationshipCreator.create(anyList())).thenReturn(IsLearningFactory.isLearningListRandom());
 
     var request = StudentFactory.createStudentRequest();
 
@@ -151,37 +154,6 @@ class StudentServiceTest {
     );
 
     assertEquals("Partial name must be not null", exception.getMessage());
-  }
-
-  @Test
-  @DisplayName("Quando o `Department` já existir deveria busca-lo no banco de dados e criar o relacionamento `BELONGS_TO`")
-  void whenDepartmentAlreadyExistShouldFindInDatabaseAndCreateRelationship() {
-    when(this.studentRepository.create(isA(STUDENT_REPOSITORY_ARG))).thenReturn(StudentFactory.studentWithId());
-    when(this.subjectRepository.create(isA(SUBJECT_REPOSITORY_ARG))).thenReturn(subjectWithDummyName());
-    when(this.belongsToRelationshipCreator.create(isA(StudentCreateRequest.class))).thenReturn(DepartmentFactory.departmentWithId());
-
-    final var request = StudentFactory.createStudentRequest();
-
-    final var response = this.studentService.create(request);
-
-    verify(this.belongsToRelationshipCreator, times(1)).create(isA(StudentCreateRequest.class));
-    verify(this.departmentRepository, never()).create(isA(DEPARTMENT_REPOSITORY_ARG));
-  }
-
-  @Test
-  @DisplayName("Quando o `Subject` já existir deveria busca-lo no banco de dados e criar o relacionamento `IS_LEARNING`")
-  void whenSubjectAlreadyExistsShouldFindInDatabaseAndCreateRelationship() {
-    when(this.studentRepository.create(isA(STUDENT_REPOSITORY_ARG))).thenReturn(StudentFactory.studentWithId());
-    when(this.belongsToRelationshipCreator.create(isA(StudentCreateRequest.class))).thenReturn(DepartmentFactory.departmentWithId());
-    when(this.subjectRepository.findByName(isA(String.class))).thenReturn(Optional.of(subjectWithDummyName()));
-
-    final var request = StudentFactory.createStudentRequest();
-    final var SUBJECT_LIST_SIZE = request.subjects().size();
-
-    final var response = this.studentService.create(request);
-
-    verify(this.subjectRepository, times(SUBJECT_LIST_SIZE)).findByName(anyString());
-    verify(this.subjectRepository, never()).create(isA(SUBJECT_REPOSITORY_ARG));
   }
 
 }
