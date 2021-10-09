@@ -1,7 +1,6 @@
 package me.gabriel.neo4j.application.adapters;
 
 
-import me.gabriel.neo4j.core.domain.Student;
 import me.gabriel.neo4j.core.domain.Subject;
 import me.gabriel.neo4j.core.ports.SubjectRepository;
 import me.gabriel.neo4j.utils.data.SubjectFactory;
@@ -28,8 +27,8 @@ import static org.mockito.Mockito.when;
 class IsLearningRelationshipCreatorTest {
 
 
-  private static final Class<Student> STUDENT_REPOSITORY_ARG = Student.class;
   private static final Class<Subject> SUBJECT_REPOSITORY_ARG = Subject.class;
+  private static final Class<String> STRING_ARG = String.class;
   @InjectMocks
   private IsLearningRelationshipCreator isLearningRelationshipCreator;
   @Mock
@@ -39,7 +38,7 @@ class IsLearningRelationshipCreatorTest {
   @Test
   @DisplayName("Quando o `Subject` já existir deveria busca-lo no banco de dados e criar o relacionamento `IS_LEARNING`")
   void whenSubjectAlreadyExistsShouldFindInDatabaseAndCreateRelationship() {
-    when(this.subjectRepository.findByName(isA(String.class))).thenReturn(Optional.of(subjectWithDummyName()));
+    when(this.subjectRepository.findByName(isA(STRING_ARG))).thenReturn(Optional.of(subjectWithDummyName()));
 
     final var subjects = subjectRequestCreateList();
     final var SUBJECT_LIST_SIZE = subjects.size();
@@ -53,8 +52,8 @@ class IsLearningRelationshipCreatorTest {
   @Test
   @DisplayName("Quando o `Subject` não existir deveria cria-lo e retornar o relacionamento `IS_LEARNING`")
   void whenSubjectNotExistShouldCreate() {
-    when(this.subjectRepository.findByName(isA(String.class))).thenReturn(Optional.empty());
-    when(this.subjectRepository.create(isA(Subject.class))).thenReturn(SubjectFactory.subjectWithDummyName());
+    when(this.subjectRepository.findByName(isA(STRING_ARG))).thenReturn(Optional.empty());
+    when(this.subjectRepository.create(isA(SUBJECT_REPOSITORY_ARG))).thenReturn(SubjectFactory.subjectWithDummyName());
 
     final var subjects = subjectRequestCreateList();
     final var SUBJECT_LIST_SIZE = subjects.size();
@@ -81,7 +80,7 @@ class IsLearningRelationshipCreatorTest {
   @Test
   @DisplayName("Quando não encontrar o `Subject` por nome durante a criação do relacionamento `IS_LEARNING` deveria a exceção `IllegalStateException`")
   void whenSubjectNameNotMatchShouldThrowIllegalStateException() {
-    when(this.subjectRepository.findByName(isA(String.class))).thenReturn(
+    when(this.subjectRepository.findByName(isA(STRING_ARG))).thenReturn(
       Optional.of(SubjectFactory.subjectWithId())
     );
     final var subjects = subjectRequestCreateList();

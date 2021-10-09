@@ -28,7 +28,7 @@ import static me.gabriel.neo4j.utils.asserts.StudentResponseAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -68,7 +68,7 @@ class StudentServiceTest {
 
     when(this.studentRepository.create(isA(STUDENT_REPOSITORY_ARG))).thenReturn(StudentFactory.studentWithId());
     when(this.belongsToRelationshipCreator.create(isA(STRING_ARG))).thenReturn(DepartmentFactory.departmentWithId());
-    when(this.isLearningRelationshipCreator.create(eq(request.subjects()))).thenReturn(IsLearningFactory.isLearningListRandom());
+    when(this.isLearningRelationshipCreator.create(anyList())).thenReturn(IsLearningFactory.isLearningListRandom());
 
     var response = this.studentService.create(request);
 
