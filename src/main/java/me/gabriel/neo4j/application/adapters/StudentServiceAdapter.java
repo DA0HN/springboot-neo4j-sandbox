@@ -8,13 +8,10 @@ import me.gabriel.neo4j.core.domain.Department;
 import me.gabriel.neo4j.core.domain.IsLearning;
 import me.gabriel.neo4j.core.domain.Student;
 import me.gabriel.neo4j.core.domain.StudentNotFoundException;
-import me.gabriel.neo4j.core.domain.Subject;
 import me.gabriel.neo4j.core.ports.StudentRepository;
 import me.gabriel.neo4j.core.ports.StudentService;
-import me.gabriel.neo4j.core.ports.SubjectRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -28,8 +25,8 @@ import java.util.stream.Collectors;
 public class StudentServiceAdapter implements StudentService {
 
   private final StudentRepository studentRepository;
-  private final SubjectRepository subjectRepository;
-  private final StudentRelationshipCreator<Department> belongsToRelationshipCreator;
+  private final StudentRelationshipCreator<Department, String> belongsToRelationshipCreator;
+  private final StudentRelationshipCreator<List<IsLearning>, List<SubjectCreateRequest>> isLearningRelationshipCreator;
 
   @Override public StudentResponse create(StudentCreateRequest request) {
     var student = Student.from(request);
@@ -43,41 +40,9 @@ public class StudentServiceAdapter implements StudentService {
 
   private void createRelationships(StudentCreateRequest request, Student student) {
     student.relationships(
-      this.belongsToRelationshipCreator.create(request),
-      this.extractSubjectRelationship(request)
+      this.belongsToRelationshipCreator.create(request.departmentName()),
+      this.isLearningRelationshipCreator.create(request.subjects())
     );
-  }
-
-  private List<IsLearning> extractSubjectRelationship(StudentCreateRequest request) {
-    final var subjects = request.subjects().stream()
-      .map(this::findOrCreateSubject)
-      .collect(Collectors.toList());
-
-    return this.createIsLearningRelationshipWithSubject(subjects, request.subjects());
-  }
-
-  private Subject findOrCreateSubject(SubjectCreateRequest request) {
-    final var maybeSubject = this.subjectRepository.findByName(request.name());
-    if(maybeSubject.isEmpty()) {
-      return this.subjectRepository.create(new Subject(request.name()));
-    }
-    return maybeSubject.get();
-  }
-
-  private List<IsLearning> createIsLearningRelationshipWithSubject(
-    Collection<Subject> subjects,
-    Collection<SubjectCreateRequest> subjectRequest
-  ) {
-    return subjectRequest
-      .stream()
-      .map(data -> {
-        final var subject = subjects.stream()
-          .filter(sub -> sub.getName().equalsIgnoreCase(data.name()))
-          .findFirst()
-          .orElseThrow(() -> new IllegalStateException("Subject should be found."));
-
-        return new IsLearning(data.marks(), subject);
-      }).collect(Collectors.toList());
   }
 
   @Override public StudentResponse findById(Long studentId) {
