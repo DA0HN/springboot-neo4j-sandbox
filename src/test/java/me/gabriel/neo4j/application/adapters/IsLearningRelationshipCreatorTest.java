@@ -1,6 +1,7 @@
 package me.gabriel.neo4j.application.adapters;
 
 
+import me.gabriel.neo4j.core.domain.InvalidStateException;
 import me.gabriel.neo4j.core.domain.Subject;
 import me.gabriel.neo4j.core.ports.SubjectRepository;
 import me.gabriel.neo4j.utils.data.SubjectFactory;
@@ -86,7 +87,7 @@ class IsLearningRelationshipCreatorTest {
     final var subjects = subjectRequestCreateList();
     final var SUBJECT_LIST_SIZE = subjects.size();
     assertThatThrownBy(() -> this.isLearningRelationshipCreator.create(subjects))
-      .isInstanceOf(IllegalStateException.class)
+      .isInstanceOf(InvalidStateException.class)
       .hasMessageContaining("Subject should be found by name");
     verify(this.subjectRepository, times(SUBJECT_LIST_SIZE)).findByName(anyString());
     verify(this.subjectRepository, never()).create(isA(SUBJECT_REPOSITORY_ARG));

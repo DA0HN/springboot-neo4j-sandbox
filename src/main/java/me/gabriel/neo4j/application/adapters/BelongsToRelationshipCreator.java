@@ -1,7 +1,9 @@
 package me.gabriel.neo4j.application.adapters;
 
 import lombok.AllArgsConstructor;
+import me.gabriel.neo4j.configuration.Message;
 import me.gabriel.neo4j.core.domain.Department;
+import me.gabriel.neo4j.core.domain.SandboxDomainException;
 import me.gabriel.neo4j.core.ports.DepartmentRepository;
 import org.springframework.stereotype.Component;
 
@@ -12,9 +14,9 @@ public class BelongsToRelationshipCreator implements StudentRelationshipCreator<
 
   private final DepartmentRepository departmentRepository;
 
-  @Override public Department create(String departmentName) {
+  @Override public Department create(final String departmentName) {
     if(departmentName == null) {
-      throw new IllegalArgumentException("Department name should be not null");
+      throw new SandboxDomainException(Message.X0_NAME_SHOULD_NOT_NULL, "Department");
     }
 
     final var maybeDepartment = this.departmentRepository.findByName(
@@ -26,8 +28,8 @@ public class BelongsToRelationshipCreator implements StudentRelationshipCreator<
     return maybeDepartment.get();
   }
 
-  private Department createDepartment(String name) {
-    var department = new Department(name);
+  private Department createDepartment(final String name) {
+    final var department = new Department(name);
     this.departmentRepository.create(department);
     return department;
   }

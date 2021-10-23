@@ -1,6 +1,7 @@
 package me.gabriel.neo4j.application.adapters;
 
 import me.gabriel.neo4j.core.domain.Department;
+import me.gabriel.neo4j.core.domain.SandboxDomainException;
 import me.gabriel.neo4j.core.ports.DepartmentRepository;
 import me.gabriel.neo4j.utils.data.DepartmentFactory;
 import org.junit.jupiter.api.DisplayName;
@@ -9,13 +10,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static me.gabriel.neo4j.utils.data.StudentFactory.createStudentRequest;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.never;
@@ -37,7 +38,7 @@ class BelongsToRelationshipCreatorTest {
   @Test
   @DisplayName("Quando `StudentCreateRequest` for válido deveria buscar pelo nome o `Department` e retorna-lo caso exista")
   void shouldFindDepartmentByNameAndReturn() {
-    var request = createStudentRequest();
+    final var request = createStudentRequest();
     when(this.departmentRepository.findByName(anyString())).thenReturn(of(DepartmentFactory.departmentWithId(request.departmentName())));
 
     final var department = this.belongsToRelationshipCreator.create("name");
@@ -56,7 +57,7 @@ class BelongsToRelationshipCreatorTest {
   @Test
   @DisplayName("Quando `StudentCreateRequest` for válido e o `Department` não for encontrado deveria criar e retorna-lo")
   void shouldCreateDepartmentIfNotFindByName() {
-    var request = createStudentRequest();
+    final var request = createStudentRequest();
     when(this.departmentRepository.findByName(anyString())).thenReturn(empty());
     when(this.departmentRepository.create(isA(DEPARTMENT_ARGUMENT))).thenReturn(DepartmentFactory.departmentWithId());
 
@@ -67,10 +68,10 @@ class BelongsToRelationshipCreatorTest {
   }
 
   @Test
-  @DisplayName("Quando o nome do `Department` não for válido deveria lançar a exceção `IllegalArgumentException`")
-  void shouldThrowIllegalArgumentExceptionIfInvalidName() {
+  @DisplayName("Quando o nome do `Department` não for válido deveria lançar exceção")
+  void shouldThrowExceptionIfInvalidName() {
     assertThatThrownBy(() -> this.belongsToRelationshipCreator.create(null))
-      .isInstanceOf(IllegalArgumentException.class)
+      .isInstanceOf(SandboxDomainException.class)
       .hasMessageContaining("Department name should be not null");
     verifyNoInteractions(this.departmentRepository);
   }

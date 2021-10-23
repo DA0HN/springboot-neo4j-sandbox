@@ -3,7 +3,9 @@ package me.gabriel.neo4j.application.adapters;
 import me.gabriel.neo4j.application.api.request.SubjectCreateRequest;
 import me.gabriel.neo4j.application.api.response.StudentResponse;
 import me.gabriel.neo4j.core.domain.Department;
+import me.gabriel.neo4j.core.domain.InvalidStateException;
 import me.gabriel.neo4j.core.domain.IsLearning;
+import me.gabriel.neo4j.core.domain.SandboxDomainException;
 import me.gabriel.neo4j.core.domain.Student;
 import me.gabriel.neo4j.core.domain.StudentNotFoundException;
 import me.gabriel.neo4j.core.ports.StudentRepository;
@@ -19,6 +21,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,8 +30,6 @@ import java.util.Optional;
 import static java.util.Arrays.asList;
 import static me.gabriel.neo4j.utils.asserts.StudentResponseAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.never;
@@ -64,18 +66,18 @@ class StudentServiceTest {
   @DisplayName("Quando os dados do estudante for válido deveria criar o `Student` e seus relacionamentos")
   @MockitoSettings(strictness = Strictness.LENIENT)
   void whenValidRequestShouldCreateStudentAndRelationship() {
-    var request = StudentFactory.createStudentRequest();
+    final var request = StudentFactory.createStudentRequest();
 
     when(this.studentRepository.create(isA(STUDENT_REPOSITORY_ARG))).thenReturn(StudentFactory.studentWithId());
     when(this.belongsToRelationshipCreator.create(isA(STRING_ARG))).thenReturn(DepartmentFactory.departmentWithId());
     when(this.isLearningRelationshipCreator.create(anyList())).thenReturn(IsLearningFactory.isLearningListRandom());
 
-    var response = this.studentService.create(request);
+    final var response = this.studentService.create(request);
 
     this.assertStudentResponse(response);
   }
 
-  private void assertStudentResponse(StudentResponse response) {
+  private void assertStudentResponse(final StudentResponse response) {
     assertThat(response)
       .hasId()
       .subjectsRelationshipWereCreated()
@@ -88,7 +90,7 @@ class StudentServiceTest {
 
     when(this.studentRepository.findById(isA(LONG_ARG))).thenReturn(Optional.of(StudentFactory.studentWithId()));
 
-    var response = this.studentService.findById(STUDENT_ID);
+    final var response = this.studentService.findById(STUDENT_ID);
 
     verify(this.studentRepository, times(1)).findById(isA(LONG_ARG));
     assertThat(response).isNotNull();
@@ -99,20 +101,21 @@ class StudentServiceTest {
   void whenNotFoundStudentShouldThrowException() {
     when(this.studentRepository.findById(isA(LONG_ARG))).thenReturn(Optional.empty());
 
-    assertThrows(
+    final var exception = assertThrows(
       StudentNotFoundException.class,
       () -> this.studentService.findById(STUDENT_ID)
     );
 
     verify(this.studentRepository, times(1)).findById(isA(LONG_ARG));
+    assertEquals("Student with id " + STUDENT_ID + " not found", exception.getMessage());
   }
 
   @Test
   @DisplayName("Quando o identificador do `Student` for nulo deveria lançar a exceção `IllegalArgumentException`")
   void whenFindWithIdNullShouldThrowException() {
 
-    var exception = assertThrows(
-      IllegalArgumentException.class,
+    final var exception = assertThrows(
+      InvalidStateException.class,
       () -> this.studentService.findById(null)
     );
 
@@ -130,11 +133,11 @@ class StudentServiceTest {
       StudentFactory.studentWithId()
     ));
 
-    var response = this.studentService.findAllByPartialName(STUDENT_NAME);
+    final var response = this.studentService.findAllByPartialName(STUDENT_NAME);
 
     verify(this.studentRepository, times(1)).findAllByPartialName(isA(STRING_ARG));
 
-    int EXPECTED_SIZE_LIST = 3;
+    final int EXPECTED_SIZE_LIST = 3;
 
     assertThat(response)
       .isNotNull()
@@ -144,8 +147,8 @@ class StudentServiceTest {
   @Test
   @DisplayName("Quando o nome parcial for nulo deveria lançar a exceção `IllegalArgumentException`")
   void whenPartialNameIsNullShouldThrowIllegalArgumentException() {
-    var exception = assertThrows(
-      IllegalArgumentException.class,
+    final var exception = assertThrows(
+      SandboxDomainException.class,
       () -> this.studentService.findAllByPartialName(null)
     );
 

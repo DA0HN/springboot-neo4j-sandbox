@@ -2,6 +2,8 @@ package me.gabriel.neo4j.application.adapters;
 
 import lombok.AllArgsConstructor;
 import me.gabriel.neo4j.application.api.request.SubjectCreateRequest;
+import me.gabriel.neo4j.configuration.Message;
+import me.gabriel.neo4j.core.domain.InvalidStateException;
 import me.gabriel.neo4j.core.domain.IsLearning;
 import me.gabriel.neo4j.core.domain.Subject;
 import me.gabriel.neo4j.core.ports.SubjectRepository;
@@ -9,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor
@@ -21,7 +22,7 @@ public class IsLearningRelationshipCreator implements StudentRelationshipCreator
     if(request == null) throw new IllegalArgumentException("Subject list must be not null");
     final var subjects = request.stream()
       .map(this::findOrCreateSubject)
-      .collect(Collectors.toList());
+      .toList();
     return this.createIsLearningRelationshipWithSubject(subjects, request);
   }
 
@@ -43,10 +44,10 @@ public class IsLearningRelationshipCreator implements StudentRelationshipCreator
         final var subject = subjects.stream()
           .filter(sub -> sub.getName().equalsIgnoreCase(data.name()))
           .findFirst()
-          .orElseThrow(() -> new IllegalStateException("Subject should be found by name"));
+          .orElseThrow(() -> new InvalidStateException(Message.X0_NOT_FOUND_BY_NAME, "Subject"));
         return new IsLearning(data.marks(), subject);
       })
-      .collect(Collectors.toList());
+      .toList();
   }
 
 
