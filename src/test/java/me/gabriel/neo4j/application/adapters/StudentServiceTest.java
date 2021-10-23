@@ -114,7 +114,7 @@ class StudentServiceTest {
   }
 
   @Test
-  @DisplayName("Quando o identificador do `Student` for nulo deveria lançar a exceção `IllegalArgumentException`")
+  @DisplayName("Quando o identificador do `Student` for nulo deveria lançar exceção")
   void whenFindWithIdNullShouldThrowException() {
 
     final var exception = assertThrows(
@@ -148,8 +148,8 @@ class StudentServiceTest {
   }
 
   @Test
-  @DisplayName("Quando o nome parcial for nulo deveria lançar a exceção `IllegalArgumentException`")
-  void whenPartialNameIsNullShouldThrowIllegalArgumentException() {
+  @DisplayName("Quando o nome parcial for nulo deveria lançar exceção")
+  void whenPartialNameIsNullShouldThrowException() {
     final var exception = assertThrows(
       SandboxDomainException.class,
       () -> this.studentService.findAllByPartialName(null)

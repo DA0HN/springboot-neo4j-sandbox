@@ -19,7 +19,7 @@ public class IsLearningRelationshipCreator implements StudentRelationshipCreator
   private final SubjectRepository subjectRepository;
 
   @Override public List<IsLearning> create(final List<SubjectCreateRequest> request) {
-    if(request == null) throw new IllegalArgumentException("Subject list must be not null");
+    if(request == null) throw new InvalidStateException(Message.X0_LIST_NOT_NULL, "Subject");
     final var subjects = request.stream()
       .map(this::findOrCreateSubject)
       .toList();

@@ -47,7 +47,7 @@ class IsLearningRelationshipCreatorTest {
     final var subjects = subjectRequestCreateList();
     final var SUBJECT_LIST_SIZE = subjects.size();
 
-    final var response = this.isLearningRelationshipCreator.create(subjects);
+    this.isLearningRelationshipCreator.create(subjects);
 
     verify(this.subjectRepository, times(SUBJECT_LIST_SIZE)).findByName(anyString());
     verify(this.subjectRepository, never()).create(isA(SUBJECT_REPOSITORY_ARG));
@@ -62,7 +62,7 @@ class IsLearningRelationshipCreatorTest {
     final var subjects = subjectRequestCreateList();
     final var SUBJECT_LIST_SIZE = subjects.size();
 
-    final var response = this.isLearningRelationshipCreator.create(subjects);
+    this.isLearningRelationshipCreator.create(subjects);
 
     verify(this.subjectRepository, times(SUBJECT_LIST_SIZE)).findByName(anyString());
     verify(this.subjectRepository, times(SUBJECT_LIST_SIZE)).create(isA(SUBJECT_REPOSITORY_ARG));
@@ -70,11 +70,12 @@ class IsLearningRelationshipCreatorTest {
 
 
   @Test
-  @DisplayName("Quando a lista de `Subjects` for nula deveria lançar a exceção `IllegalArgumentException`")
-  void whenSubjectsIsNullShouldThrowIllegalArgumentException() {
+  @DisplayName("Quando a lista de `Subjects` for nula deveria lançar exceção")
+  void whenSubjectsIsNullShouldThrowException() {
 
     assertThatThrownBy(() -> this.isLearningRelationshipCreator.create(null))
-      .isInstanceOf(IllegalArgumentException.class)
+
+      .isInstanceOf(InvalidStateException.class)
       .hasMessageContaining("Subject list must be not null");
 
     verify(this.subjectRepository, never()).findByName(anyString());
@@ -82,8 +83,8 @@ class IsLearningRelationshipCreatorTest {
   }
 
   @Test
-  @DisplayName("Quando não encontrar o `Subject` por nome durante a criação do relacionamento `IS_LEARNING` deveria a exceção `IllegalStateException`")
-  void whenSubjectNameNotMatchShouldThrowIllegalStateException() {
+  @DisplayName("Quando não encontrar o `Subject` por nome durante a criação do relacionamento `IS_LEARNING` deveria exceção")
+  void whenSubjectNameNotMatchShouldThrowException() {
     when(this.subjectRepository.findByName(isA(STRING_ARG))).thenReturn(
       Optional.of(SubjectFactory.subjectWithId())
     );
