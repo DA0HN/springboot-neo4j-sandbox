@@ -4,10 +4,11 @@ import me.gabriel.neo4j.configuration.Message;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Tags;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Tag("unit")
+@Tags({@Tag("unit"), @Tag("all")})
 class SandboxDomainExceptionTest {
 
   @BeforeEach

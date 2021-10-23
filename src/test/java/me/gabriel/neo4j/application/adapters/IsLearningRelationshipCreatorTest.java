@@ -7,6 +7,7 @@ import me.gabriel.neo4j.core.ports.SubjectRepository;
 import me.gabriel.neo4j.utils.data.SubjectFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Tags;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,7 +26,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@Tag("unit")
+@Tags({@Tag("unit"), @Tag("all")})
 @ExtendWith(MockitoExtension.class)
 class IsLearningRelationshipCreatorTest {
 

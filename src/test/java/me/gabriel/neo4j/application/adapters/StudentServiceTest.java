@@ -15,6 +15,7 @@ import me.gabriel.neo4j.utils.data.StudentFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Tags;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -42,7 +43,7 @@ import static org.mockito.Mockito.when;
  * @author daohn
  * @since 21/08/2021
  */
-@Tag("unit")
+@Tags({@Tag("unit"), @Tag("all")})
 @ExtendWith(MockitoExtension.class)
 class StudentServiceTest {
 

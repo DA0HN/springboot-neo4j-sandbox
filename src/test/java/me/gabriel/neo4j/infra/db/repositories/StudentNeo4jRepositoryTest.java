@@ -5,6 +5,8 @@ import me.gabriel.neo4j.utils.data.DepartmentFactory;
 import me.gabriel.neo4j.utils.data.IsLearningFactory;
 import me.gabriel.neo4j.utils.data.StudentFactory;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Tags;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.neo4j.DataNeo4jTest;
@@ -13,6 +15,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Tags({@Tag("db"), @Tag("all")})
 @DataNeo4jTest
 class StudentNeo4jRepositoryTest {
 
@@ -28,7 +31,7 @@ class StudentNeo4jRepositoryTest {
 
   @Test
   void whenDatabaseHasStudentsStoredShouldReturnAllStudents() {
-    List<Student> students = this.studentNeo4jRepository.findAll();
+    final List<Student> students = this.studentNeo4jRepository.findAll();
 
     assertThat(students)
       .isNotNull()
@@ -48,7 +51,7 @@ class StudentNeo4jRepositoryTest {
 
     this.studentNeo4jRepository.save(student);
 
-    List<Student> students = this.studentNeo4jRepository.findAllStudentsByPartialName("gab");
+    final List<Student> students = this.studentNeo4jRepository.findAllStudentsByPartialName("gab");
 
     assertThat(students)
       .isNotNull()
