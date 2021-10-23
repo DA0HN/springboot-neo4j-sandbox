@@ -1,7 +1,7 @@
 package me.gabriel.neo4j.application.adapters;
 
 import lombok.AllArgsConstructor;
-import me.gabriel.neo4j.configuration.Message;
+import me.gabriel.neo4j.configuration.Messages;
 import me.gabriel.neo4j.core.domain.Department;
 import me.gabriel.neo4j.core.domain.SandboxDomainException;
 import me.gabriel.neo4j.core.ports.DepartmentRepository;
@@ -16,7 +16,7 @@ public class BelongsToRelationshipCreator implements StudentRelationshipCreator<
 
   @Override public Department create(final String departmentName) {
     if(departmentName == null) {
-      throw new SandboxDomainException(Message.X0_NAME_SHOULD_NOT_NULL, "Department");
+      throw new SandboxDomainException(Messages.X0_NAME_SHOULD_NOT_NULL, "Department");
     }
 
     final var maybeDepartment = this.departmentRepository.findByName(

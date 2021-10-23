@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import me.gabriel.neo4j.application.api.request.StudentCreateRequest;
 import me.gabriel.neo4j.application.api.request.SubjectCreateRequest;
 import me.gabriel.neo4j.application.api.response.StudentResponse;
-import me.gabriel.neo4j.configuration.Message;
+import me.gabriel.neo4j.configuration.Messages;
 import me.gabriel.neo4j.core.domain.Department;
 import me.gabriel.neo4j.core.domain.InvalidStateException;
 import me.gabriel.neo4j.core.domain.IsLearning;
@@ -50,19 +50,19 @@ public class StudentServiceAdapter implements StudentService {
   @Override public StudentResponse findById(final Long studentId) {
 
     if(Objects.isNull(studentId)) {
-      throw new InvalidStateException(Message.X0_ID_NOT_NULL, "Student");
+      throw new InvalidStateException(Messages.X0_ID_NOT_NULL, "Student");
     }
 
     return this.studentRepository
       .findById(studentId)
       .map(StudentResponse::from)
-      .orElseThrow(() -> new StudentNotFoundException(Message.X0_WITH_ID_X1_NOT_FOUND, "Student", studentId));
+      .orElseThrow(() -> new StudentNotFoundException(Messages.X0_WITH_ID_X1_NOT_FOUND, "Student", studentId));
   }
 
   @Override public List<StudentResponse> findAllByPartialName(final String partialName) {
 
     if(partialName == null) {
-      throw new SandboxDomainException(Message.PARTIAL_NAME_NOT_NULL);
+      throw new SandboxDomainException(Messages.PARTIAL_NAME_NOT_NULL);
     }
 
     return this.studentRepository.findAllByPartialName(partialName)

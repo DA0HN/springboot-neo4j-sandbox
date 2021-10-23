@@ -1,6 +1,6 @@
 package me.gabriel.neo4j.core.domain;
 
-import me.gabriel.neo4j.configuration.Message;
+import me.gabriel.neo4j.configuration.Messages;
 
 public class InvalidStateException extends SandboxDomainException {
 
@@ -8,7 +8,7 @@ public class InvalidStateException extends SandboxDomainException {
     super(message);
   }
 
-  public InvalidStateException(final Message message, final Object... args) {
-    super(message, args);
+  public InvalidStateException(final Messages messages, final Object... args) {
+    super(messages, args);
   }
 }

@@ -1,6 +1,6 @@
 package me.gabriel.neo4j.core.domain;
 
-import me.gabriel.neo4j.configuration.Message;
+import me.gabriel.neo4j.configuration.Messages;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -18,7 +18,7 @@ class SandboxDomainExceptionTest {
   @Test
   @DisplayName("Quando receber um enum do tipo `Message` com argumentos deveria formata-lo de acordo com o enumerado")
   void whenReceiveMessageEnumAndArgsShouldFormat() {
-    final var exception = new InvalidStateException(Message.X0_NOT_FOUND_BY_NAME, "subject");
+    final var exception = new InvalidStateException(Messages.X0_NOT_FOUND_BY_NAME, "subject");
     assertEquals("subject should be found by name", exception.getMessage());
   }
 

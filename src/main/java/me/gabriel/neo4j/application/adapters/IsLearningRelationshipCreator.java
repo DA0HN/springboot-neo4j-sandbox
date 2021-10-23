@@ -2,7 +2,7 @@ package me.gabriel.neo4j.application.adapters;
 
 import lombok.AllArgsConstructor;
 import me.gabriel.neo4j.application.api.request.SubjectCreateRequest;
-import me.gabriel.neo4j.configuration.Message;
+import me.gabriel.neo4j.configuration.Messages;
 import me.gabriel.neo4j.core.domain.InvalidStateException;
 import me.gabriel.neo4j.core.domain.IsLearning;
 import me.gabriel.neo4j.core.domain.Subject;
@@ -19,7 +19,7 @@ public class IsLearningRelationshipCreator implements StudentRelationshipCreator
   private final SubjectRepository subjectRepository;
 
   @Override public List<IsLearning> create(final List<SubjectCreateRequest> request) {
-    if(request == null) throw new InvalidStateException(Message.X0_LIST_NOT_NULL, "Subject");
+    if(request == null) throw new InvalidStateException(Messages.X0_LIST_NOT_NULL, "Subject");
     final var subjects = request.stream()
       .map(this::findOrCreateSubject)
       .toList();
@@ -44,7 +44,7 @@ public class IsLearningRelationshipCreator implements StudentRelationshipCreator
         final var subject = subjects.stream()
           .filter(sub -> sub.getName().equalsIgnoreCase(data.name()))
           .findFirst()
-          .orElseThrow(() -> new InvalidStateException(Message.X0_NOT_FOUND_BY_NAME, "Subject"));
+          .orElseThrow(() -> new InvalidStateException(Messages.X0_NOT_FOUND_BY_NAME, "Subject"));
         return new IsLearning(data.marks(), subject);
       })
       .toList();

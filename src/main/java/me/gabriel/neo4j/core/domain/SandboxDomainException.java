@@ -1,6 +1,6 @@
 package me.gabriel.neo4j.core.domain;
 
-import me.gabriel.neo4j.configuration.Message;
+import me.gabriel.neo4j.configuration.Messages;
 
 import java.text.MessageFormat;
 import java.util.Locale;
@@ -12,12 +12,12 @@ public class SandboxDomainException extends RuntimeException {
     super(message);
   }
 
-  public SandboxDomainException(final Message message, final Object... args) {
-    super(format(message, args));
+  public SandboxDomainException(final Messages messages, final Object... args) {
+    super(format(messages, args));
   }
 
 
-  protected static String format(final Message key, final Object... args) {
+  protected static String format(final Messages key, final Object... args) {
     final var bundle = ResourceBundle.getBundle("messages", Locale.getDefault());
     final var message = bundle.getString(key.messageAsKey());
     return MessageFormat.format(message, args);

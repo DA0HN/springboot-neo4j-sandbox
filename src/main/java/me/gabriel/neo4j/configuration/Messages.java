@@ -1,6 +1,6 @@
 package me.gabriel.neo4j.configuration;
 
-public enum Message {
+public enum Messages {
   X0_NOT_FOUND_BY_NAME("x0.not-found.by.name"),
   X0_NAME_SHOULD_NOT_NULL("x0.name.not-null"),
   PARTIAL_NAME_NOT_NULL("partial.name.not-null"),
@@ -10,7 +10,7 @@ public enum Message {
 
   private final String messageKey;
 
-  Message(final String messageKey) {
+  Messages(final String messageKey) {
     this.messageKey = messageKey;
   }
 

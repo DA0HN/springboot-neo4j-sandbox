@@ -1,6 +1,6 @@
 package me.gabriel.neo4j.core.domain;
 
-import me.gabriel.neo4j.configuration.Message;
+import me.gabriel.neo4j.configuration.Messages;
 
 /**
  * @author daohn
@@ -11,7 +11,7 @@ public class StudentNotFoundException extends SandboxDomainException {
     super(message);
   }
 
-  public StudentNotFoundException(final Message message, final Object... args) {
-    super(message, args);
+  public StudentNotFoundException(final Messages messages, final Object... args) {
+    super(messages, args);
   }
 }
