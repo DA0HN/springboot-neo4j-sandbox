@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -29,11 +30,11 @@ public class StudentController {
 
   @PostMapping
   public ResponseEntity<ResponseBase<StudentResponse>> create(
-    @RequestBody StudentCreateRequest request
+    @Valid @RequestBody final StudentCreateRequest request
   ) {
-    var studentCreateRequest = this.studentService.create(request);
+    final var studentCreateRequest = this.studentService.create(request);
 
-    var response = new ResponseBase<StudentResponse>()
+    final var response = new ResponseBase<StudentResponse>()
       .data(studentCreateRequest)
       .message("Student created successfully");
 
@@ -41,22 +42,22 @@ public class StudentController {
   }
 
   @GetMapping("/{studentId}")
-  public ResponseEntity<ResponseBase<StudentResponse>> findById(@PathVariable("studentId") Long studentId) {
-    var foundStudent = this.studentService.findById(studentId);
+  public ResponseEntity<ResponseBase<StudentResponse>> findById(@PathVariable("studentId") final Long studentId) {
+    final var foundStudent = this.studentService.findById(studentId);
 
-    var response = new ResponseBase<StudentResponse>()
+    final var response = new ResponseBase<StudentResponse>()
       .data(foundStudent)
       .message("Student found!");
     return ResponseEntity.ok(response);
   }
 
   @GetMapping
-  public ResponseEntity<ResponseBase<List<StudentResponse>>> findByName(@RequestParam("name") String name) {
-    var foundStudent = this.studentService.findAllByPartialName(name);
+  public ResponseEntity<ResponseBase<List<StudentResponse>>> findByName(@RequestParam("name") final String name) {
+    final var foundStudent = this.studentService.findAllByPartialName(name);
 
-    String message = foundStudent.isEmpty() ? "No students found with name '" + name + "'." : "Student found!";
+    final String message = foundStudent.isEmpty() ? "No students found with name '" + name + "'." : "Student found!";
 
-    var response = new ResponseBase<List<StudentResponse>>()
+    final var response = new ResponseBase<List<StudentResponse>>()
       .data(foundStudent)
       .message(message);
 
